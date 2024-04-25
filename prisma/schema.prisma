@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model Users {
+    id              String    @id @default(uuid())
+    namaSiswa       String
+    username        String    @db.VarChar(8)
+    email           String
+    password        String    @db.VarChar(255)
+    nisn            String    @db.VarChar(11)
+    profileImage    String?
+    role            Roles
+    emailVerifiedAt DateTime?
+    createdAt       DateTime  @default(now())
+
+    madings   Madings[]
+    Comments  Comments[]
+    Bookmarks Bookmarks[]
+
+    @@unique([id, username, email, nisn, createdAt])
+}
+
+model Madings {
+    id          Int       @id @default(autoincrement())
+    authorId    String
+    title       String    @db.VarChar(100)
+    slug        String    @db.VarChar(255)
+    description String    @db.Text
+    thumbnail   String    @db.VarChar(255)
+    article     String    @db.Text
+    approved    Boolean   @default(false)
+    priority    Priorites
+    categoryId  Int
+    publishedAt DateTime  @default(now())
+
+    category  Categories  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+    author    Users       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    comments  Comments[]
+    bookmarks Bookmarks[]
+    analytics Analytics?
+}
+
+model Comments {
+    id       Int    @id @default(autoincrement())
+    userId   String
+    madingId Int
+    comment  String @db.Text
+
+    user   Users   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    mading Madings @relation(fields: [madingId], references: [id], onDelete: Cascade)
+}
+
+model Categories {
+    id        Int       @id @default(autoincrement())
+    name      String    @db.VarChar(30)
+    createdAt DateTime  @default(now())
+    Madings   Madings[]
+}
+
+model Bookmarks {
+    id        Int      @id @default(autoincrement())
+    userId    String
+    madingId  Int
+    createdAt DateTime @default(now())
+
+    user   Users   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    mading Madings @relation(fields: [madingId], references: [id], onDelete: Cascade)
+}
+
+model Analytics {
+    id        Int    @id @default(autoincrement())
+    views     BigInt @default(0)
+    bookmarks BigInt @default(0)
+    madingId  Int
+
+    madings Madings @relation(fields: [madingId], references: [id], onDelete: Cascade)
+
+    @@unique([madingId])
+}
+
+enum Priorites {
+    Normal
+    Important
+}
+
+enum Roles {
+    Siswa
+    Penulis
+    Admin
+}
