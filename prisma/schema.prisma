@@ -17,7 +17,7 @@ model Users {
     email           String
     password        String    @db.VarChar(255)
     nisn            String    @db.VarChar(11)
-    profileImage    String?
+    profileImage    String?   @db.VarChar(255)
     role            Roles
     emailVerifiedAt DateTime?
     createdAt       DateTime  @default(now())
@@ -25,28 +25,35 @@ model Users {
     madings   Madings[]
     Comments  Comments[]
     Bookmarks Bookmarks[]
+    Likes     Likes[]
 
     @@unique([id, username, email, nisn, createdAt])
 }
 
 model Madings {
-    id          Int       @id @default(autoincrement())
+    id          Int        @id @default(autoincrement())
     authorId    String
-    title       String    @db.VarChar(100)
-    slug        String    @db.VarChar(255)
-    description String    @db.Text
-    thumbnail   String    @db.VarChar(255)
-    article     String    @db.Text
-    approved    Boolean   @default(false)
-    priority    Priorites
+    title       String     @db.VarChar(100)
+    slug        String     @db.VarChar(255)
+    description String     @db.Text
+    thumbnail   String     @db.VarChar(255)
+    article     String     @db.Text
+    approved    Boolean    @default(false)
+    priority    Priorities
     categoryId  Int
-    publishedAt DateTime  @default(now())
+    createdAt   DateTime   @default(now())
+    publishedAt DateTime?
 
     category  Categories  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
     author    Users       @relation(fields: [authorId], references: [id], onDelete: Cascade)
     comments  Comments[]
     bookmarks Bookmarks[]
     analytics Analytics?
+    Likes     Likes[]
+
+    @@unique([id, title, slug, createdAt])
+    @@index([authorId])
+    @@index([categoryId])
 }
 
 model Comments {
@@ -59,27 +66,45 @@ model Comments {
     mading Madings @relation(fields: [madingId], references: [id], onDelete: Cascade)
 }
 
-model Categories {
-    id        Int       @id @default(autoincrement())
-    name      String    @db.VarChar(30)
-    createdAt DateTime  @default(now())
-    Madings   Madings[]
-}
-
-model Bookmarks {
-    id        Int      @id @default(autoincrement())
+model Likes {
     userId    String
     madingId  Int
     createdAt DateTime @default(now())
 
     user   Users   @relation(fields: [userId], references: [id], onDelete: Cascade)
     mading Madings @relation(fields: [madingId], references: [id], onDelete: Cascade)
+
+    @@id([userId, madingId, createdAt])
+    @@index([userId])
+    @@index([madingId])
+}
+
+model Bookmarks {
+    userId    String
+    madingId  Int
+    createdAt DateTime @default(now())
+
+    user   Users   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    mading Madings @relation(fields: [madingId], references: [id], onDelete: Cascade)
+
+    @@id([userId, madingId, createdAt])
+    @@index([userId])
+    @@index([madingId])
+}
+
+model Categories {
+    id        Int       @id @default(autoincrement())
+    name      String    @db.VarChar(30)
+    createdAt DateTime  @default(now())
+    Madings   Madings[]
+
+    @@unique([name, createdAt])
 }
 
 model Analytics {
     id        Int    @id @default(autoincrement())
-    views     BigInt @default(0)
-    bookmarks BigInt @default(0)
+    views     BigInt @default(0) @db.UnsignedBigInt
+    bookmarks BigInt @default(0) @db.UnsignedBigInt
     madingId  Int
 
     madings Madings @relation(fields: [madingId], references: [id], onDelete: Cascade)
@@ -87,7 +112,7 @@ model Analytics {
     @@unique([madingId])
 }
 
-enum Priorites {
+enum Priorities {
     Normal
     Important
 }
