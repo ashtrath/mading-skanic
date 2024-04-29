@@ -7,6 +7,10 @@ generator client {
 
 datasource db {
     provider = "mysql"
+    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
+    // Further reading:
+    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
+    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
     url      = env("DATABASE_URL")
 }
 
@@ -18,7 +22,7 @@ model Users {
     password        String    @db.VarChar(255)
     nisn            String    @db.VarChar(11)
     profileImage    String?   @db.VarChar(255)
-    role            Roles
+    role            Roles     @default(Siswa)
     emailVerifiedAt DateTime?
     createdAt       DateTime  @default(now())
 
