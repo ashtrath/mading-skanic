@@ -64,8 +64,8 @@ export const authOptions: NextAuthOptions = {
     Credentials({
       name: "credentials",
       credentials: {
-        username: {
-          label: "Username",
+        usernameOrEmail: {
+          label: "Username / Email",
           type: "text",
         },
         password: {
@@ -77,7 +77,9 @@ export const authOptions: NextAuthOptions = {
         const cred = await loginSchema.parseAsync(credentials);
 
         const user = await db.users.findFirst({
-          where: { username: cred.username },
+          where: {
+            OR: [{ username: cred.username }, { email: cred.username }],
+          },
         });
 
         if (!user) {

@@ -25,7 +25,7 @@ export const LoginForm = () => {
         {error && (
           <p className="text-center text-red-600">Login failed, try again!</p>
         )}
-        <label>Username</label>
+        <label>Username / Email</label>
         <input
           className="rounded border px-4 py-1"
           type="text"
