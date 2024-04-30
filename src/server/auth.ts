@@ -23,15 +23,8 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
       id: string;
-      // ...other properties
-      // role: UserRole;
     };
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
 
 /**
@@ -58,6 +51,9 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
+  session: {
+    strategy: "jwt",
+  },
   secret: env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/auth/login",
@@ -66,7 +62,7 @@ export const authOptions: NextAuthOptions = {
   },
   providers: [
     Credentials({
-      name: "Credentials",
+      name: "credentials",
       credentials: {
         username: {
           label: "Username",
@@ -81,7 +77,7 @@ export const authOptions: NextAuthOptions = {
         const cred = await loginSchema.parseAsync(credentials);
 
         const user = await db.users.findFirst({
-          where: { email: cred.username },
+          where: { username: cred.username },
         });
 
         if (!user) {

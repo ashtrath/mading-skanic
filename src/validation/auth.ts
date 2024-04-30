@@ -6,7 +6,9 @@ export const loginSchema = z.object({
 });
 
 export const registerSchema = loginSchema.extend({
+  namaSiswa: z.string(),
   email: z.string().email(),
+  nisn: z.string().max(11),
 });
 
 export type ILogin = z.infer<typeof loginSchema>;
