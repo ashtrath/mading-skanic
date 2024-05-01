@@ -1,29 +1,35 @@
 import Link from "next/link";
 import { type ReactNode } from "react";
-import { IconContext } from "react-icons";
+import { MaterialSymbol, type SymbolCodepoints } from "react-material-symbols";
 
 type NavLinkProps = {
-  icon: ReactNode;
+  icon: SymbolCodepoints;
   href: string;
   children: ReactNode;
   gray?: boolean;
   className?: string;
 };
 
-const NavLink = ({ icon, href, children, gray, className = "" }: NavLinkProps) => {
+const NavLink = ({
+  icon,
+  href,
+  children,
+  gray,
+  className = "",
+}: NavLinkProps) => {
   return (
     <Link
       href={href}
-      className={`flex items-center gap-2 px-4 py-2 ${gray ? "bg-mono-black" : ""} ${className}`}
+      className={`flex items-center gap-2 px-4 py-2 ${gray ? "bg-mono-black text-mono-white" : "text-mono-black"} ${className}`}
     >
-      <IconContext.Provider
-        value={{ className: "size-6 text-mono-black" }}
-      >
-        <div>
-          {icon}
-        </div>
-      </IconContext.Provider>
-      <span className="text-sm font-mono">{children}</span>
+      <MaterialSymbol
+        icon={icon}
+        fill={false}
+        weight={200}
+        grade={0}
+        size={24}
+      />
+      <span className="font-mono">{children}</span>
     </Link>
   );
 };

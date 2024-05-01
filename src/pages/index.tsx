@@ -1,7 +1,12 @@
 import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import Image from "next/image";
+import Link from "next/link";
 
+import illustrasiPapan from "~/assets/images/illustrasiPapan.webp";
+import { buttonVariants } from "~/components/Button";
+import Footer from "~/components/Footer";
 import NavBar from "~/components/NavBar";
 
 const Home: NextPage = () => {
@@ -15,6 +20,43 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar />
+      <main className="min-h-screen">
+        <section
+          id="home"
+          className="relative flex min-h-screen items-center overflow-x-hidden px-20"
+        >
+          <div className="w-2/3">
+            <h1 className="mb-4 text-2xl font-bold text-mono-black">
+              Selamat datang di Mading Skanic!
+            </h1>
+            <p className="mb-6 w-3/4 text-balance text-mono-black">
+              Selamat datang di platform mading digital sekolah kami, Mading
+              Skanic! Di sini Anda akan menemukan informasi dan pengumuman
+              terkini seputar kegiatan dan perkembangan di SMKN 1 Ciomas.
+            </p>
+            <Link
+              href={"/madings"}
+              className={buttonVariants({ intent: "primary" })}
+            >
+              Baca Mading
+            </Link>
+          </div>
+          <Image
+            src={illustrasiPapan}
+            width={617}
+            height={420}
+            alt="Gambar dekoratif papan majalah dinding."
+            className="position absolute bottom-0 right-0 z-0"
+          />
+        </section>
+        <section id="madingPenting" className="px-20 pt-16">
+          <h2>Mading Penting</h2>
+        </section>
+        <section id="madingTerbaru" className="px-20 py-16">
+          <h2>Mading Terbaru</h2>
+        </section>
+      </main>
+      <Footer />
     </>
   );
 };

@@ -5,6 +5,7 @@ import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 
 import { api } from "~/utils/api";
 
+import "react-material-symbols/outlined";
 import "~/styles/globals.css";
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -25,7 +26,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <main className={`font-sans ${ibmPlexSans.variable} ${ibmPlexMono.variable}`}>
+      <main className={`bg-mono-white font-sans ${ibmPlexSans.variable} ${ibmPlexMono.variable}`}>
         <Component {...pageProps} />
       </main>
     </SessionProvider>
