@@ -13,6 +13,8 @@ export default {
         mono: {
           black: "#212529",
           white: "#E9ECEF",
+          danger: "#8E0D0D",
+          warning: "#AF860A",
         },
       },
       transitionTimingFunction: {
