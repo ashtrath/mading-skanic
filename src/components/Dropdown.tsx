@@ -1,4 +1,12 @@
-import { useRef, useState, type ReactNode } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useContext,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { MaterialSymbol } from "react-material-symbols";
 
 type DropdownProps = {
@@ -11,48 +19,60 @@ type DropdownItemProps = {
   children: ReactNode;
 };
 
+interface IDropdownContext {
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const DropdownContext = createContext<IDropdownContext>({
+  isOpen: false,
+  setIsOpen: () => {},
+});
+
 const Dropdown = ({ title, children, className }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const toggleOpen = () => {
-    setIsOpen(!isOpen);
-  };
-
   return (
-    <div
-      ref={dropdownRef}
-      className="flex w-36 flex-col items-center justify-center"
-    >
-      <button
-        onClick={toggleOpen}
-        className={`flex h-auto min-h-10 w-full items-center justify-between break-words bg-mono-black px-4 py-2 font-mono text-mono-white ${className}`}
+    <DropdownContext.Provider value={{ isOpen, setIsOpen }}>
+      <div
+        ref={dropdownRef}
+        className="flex w-36 flex-col items-center justify-center"
       >
-        {title}
-        <MaterialSymbol
-          icon="arrow_drop_down"
-          fill={false}
-          weight={200}
-          grade={0}
-          size={24}
-          className={`transition-transform ${isOpen ? "ease-in-expo rotate-180 duration-200" : "ease-out-expo rotate-0 duration-150"}`}
-        />
-      </button>
-
-      <div className="relative">
-        <ul
-          className={`absolute -left-[4.5rem] z-20 mt-2 w-36 overflow-hidden border border-mono-black bg-mono-white transition-all duration-200 ease-in-out ${isOpen ? "h-auto shadow-md" : "invisible h-0 shadow-none"}`}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={`flex h-auto min-h-10 w-full items-center justify-between break-words bg-mono-black px-4 py-2 font-mono text-mono-white ${className}`}
         >
-          {children}
-        </ul>
+          {title}
+          <MaterialSymbol
+            icon="arrow_drop_down"
+            fill={false}
+            weight={200}
+            grade={0}
+            size={24}
+            className={`transition-transform ${isOpen ? "rotate-180 duration-200 ease-out-expo" : "rotate-0 duration-150 ease-in-expo"}`}
+          />
+        </button>
+        <div className="relative">
+          <ul
+            className={`absolute -left-[4.5rem] z-20 mt-2 w-36 overflow-hidden border border-mono-black bg-mono-white transition-all ${isOpen ? "visible scale-100 duration-100 ease-out-expo" : "invisible scale-95 duration-75 ease-in-expo"}`}
+          >
+            {children}
+          </ul>
+        </div>
       </div>
-    </div>
+    </DropdownContext.Provider>
   );
 };
 
 const DropdownItem = ({ children }: DropdownItemProps) => {
+  const { isOpen, setIsOpen } = useContext(DropdownContext);
+
   return (
-    <li className="h-auto cursor-pointer select-none break-words p-2">
+    <li
+      className="h-auto cursor-pointer select-none break-words p-2"
+      onClick={() => setIsOpen(!isOpen)}
+    >
       {children}
     </li>
   );
