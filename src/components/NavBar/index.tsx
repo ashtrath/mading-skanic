@@ -1,7 +1,8 @@
-import Link from "next/link";
-import NavLink from "./NavLink";
 import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
+import { MaterialSymbol } from "react-material-symbols";
 import { Dropdown, DropdownItem } from "../Dropdown";
+import NavLink from "./NavLink";
 
 const NavBar = () => {
   const { data: session } = useSession();
@@ -35,7 +36,36 @@ const NavBar = () => {
               </li>
               <li>
                 <Dropdown title={session.user.name}>
-                  <DropdownItem><button onClick={() => signOut()}>Sign Out</button></DropdownItem>
+                  <DropdownItem>
+                    <Link
+                      href={`/user/${encodeURIComponent(session.user.id)}`}
+                      className="flex items-center gap-1 font-mono"
+                    >
+                      <MaterialSymbol
+                        icon={"account_circle"}
+                        fill={false}
+                        weight={200}
+                        grade={0}
+                        size={24}
+                      />
+                      Profile
+                    </Link>
+                  </DropdownItem>
+                  <DropdownItem>
+                    <button
+                      onClick={() => signOut()}
+                      className="flex items-center gap-1 font-mono text-mono-danger"
+                    >
+                      <MaterialSymbol
+                        icon={"logout"}
+                        fill={false}
+                        weight={200}
+                        grade={0}
+                        size={24}
+                      />
+                      Sign Out
+                    </button>
+                  </DropdownItem>
                 </Dropdown>
               </li>
             </>
