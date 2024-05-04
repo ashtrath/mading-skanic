@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
-import { useForm, type SubmitHandler } from "react-hook-form";
 import { useState } from "react";
+import { useForm, type SubmitHandler } from "react-hook-form";
 
 import { api } from "~/utils/api";
-import type { IRegister } from "~/validation/auth";
+import type { IRegister } from "~/utils/validation/auth";
 
 export const RegisterForm = () => {
   const router = useRouter();

@@ -1,6 +1,6 @@
-import { registerSchema } from "~/validation/auth";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcrypt";
+import { registerSchema } from "~/utils/validation/auth";
 
 const SALT_ROUNDS = 10;
 

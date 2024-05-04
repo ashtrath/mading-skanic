@@ -11,7 +11,7 @@ import Credentials from "next-auth/providers/credentials";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
-import { loginSchema } from "~/validation/auth";
+import { loginSchema } from "~/utils/validation/auth";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
