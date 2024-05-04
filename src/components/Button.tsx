@@ -1,5 +1,5 @@
 import { cva } from "class-variance-authority";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 type ButtonVariantProps = {
   intent?: "primary" | "secondary" | "warning" | "danger";
@@ -10,30 +10,32 @@ type ButtonProps = ButtonVariantProps & {
   icon?: "left" | "right";
   className?: string;
   children: ReactNode;
-  [key: string]: any;
 };
 
 type ButtonVariantFunction = (props: ButtonVariantProps) => string;
 
-export const buttonVariants = cva("text-sm font-mono border", {
-  variants: {
-    intent: {
-      primary: "bg-mono-black text-mono-white border-mono-black",
-      secondary: "bg-mono-white text-mono-black border-mono-black",
-      warning: "bg-mono-white text-mono-black border-mono-black",
-      danger: "bg-mono-white text-mono-black border-mono-black",
+export const buttonVariants: ButtonVariantFunction = cva(
+  "text-sm font-mono border",
+  {
+    variants: {
+      intent: {
+        primary: "bg-mono-black text-mono-white border-mono-black",
+        secondary: "bg-mono-white text-mono-black border-mono-black",
+        warning: "bg-mono-white text-mono-black border-mono-black",
+        danger: "bg-mono-white text-mono-black border-mono-black",
+      },
+      size: {
+        normal: "py-3 px-11",
+        small: "py-3 px-8",
+      },
     },
-    size: {
-      normal: "py-3 px-11",
-      small: "py-3 px-8",
-    },
-  },
 
-  defaultVariants: {
-    intent: "primary",
-    size: "normal",
+    defaultVariants: {
+      intent: "primary",
+      size: "normal",
+    },
   },
-});
+);
 
 const Button = ({
   intent,
@@ -44,7 +46,10 @@ const Button = ({
   ...props
 }: ButtonProps) => {
   return (
-    <button className={`${buttonVariants({ intent, size })} ${className}`} {...props}>
+    <button
+      className={`${buttonVariants({ intent, size })} ${className}`}
+      {...props}
+    >
       {children}
     </button>
   );
