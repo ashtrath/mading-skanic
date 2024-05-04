@@ -29,8 +29,8 @@ const NavBar = () => {
           </li>
           {session ? (
             <>
-              <li>
-                <NavLink href={"/auth/signup"} icon="bookmark">
+              <li className="mr-2">
+                <NavLink href={"/bookmarks"} icon="bookmark">
                   Bookmarks
                 </NavLink>
               </li>
@@ -72,7 +72,7 @@ const NavBar = () => {
           ) : (
             <>
               <div className="mx-2 h-8 w-px bg-mono-black"></div>
-              <li>
+              <li className="mr-2">
                 <NavLink href={"/auth/signup"} icon="person_add">
                   Daftar
                 </NavLink>
