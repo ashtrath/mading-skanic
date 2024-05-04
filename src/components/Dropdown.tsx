@@ -1,11 +1,12 @@
 import {
-  Dispatch,
-  SetStateAction,
   createContext,
   useContext,
+  useEffect,
   useRef,
   useState,
+  type Dispatch,
   type ReactNode,
+  type SetStateAction,
 } from "react";
 import { MaterialSymbol } from "react-material-symbols";
 
@@ -26,12 +27,34 @@ interface IDropdownContext {
 
 const DropdownContext = createContext<IDropdownContext>({
   isOpen: false,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setIsOpen: () => {},
 });
 
 const Dropdown = ({ title, children, className }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleClickOutside: EventListener = (event) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener("mouseup", handleClickOutside);
+    window.addEventListener("touchend", handleClickOutside);
+
+    // Clean Up
+    return () => {
+      window.removeEventListener("mouseup", handleClickOutside);
+      window.removeEventListener("touchend", handleClickOutside);
+    };
+  }, [isOpen]);
 
   return (
     <DropdownContext.Provider value={{ isOpen, setIsOpen }}>
