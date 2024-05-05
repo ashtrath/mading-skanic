@@ -20,7 +20,7 @@ const NavLink = ({
   return (
     <Link
       href={href}
-      className={`flex items-center gap-2 px-4 py-2 group ${gray ? "bg-mono-black text-mono-white" : "text-mono-black"} ${className}`}
+      className={`group flex items-center gap-2 px-4 py-2 ${gray ? "bg-mono-black text-mono-white" : "text-mono-black"} ${className}`}
     >
       <MaterialSymbol
         icon={icon}
@@ -29,7 +29,9 @@ const NavLink = ({
         grade={0}
         size={24}
       />
-      <span className="font-mono transition-all duration-75 ease-out no-underline underline-offset-0 group-hover:underline group-hover:underline-offset-8">{children}</span>
+      <span className="font-mono no-underline underline-offset-0 underline-offset-4 group-hover:underline">
+        {children}
+      </span>
     </Link>
   );
 };
