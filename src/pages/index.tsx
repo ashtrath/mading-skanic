@@ -2,10 +2,12 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { MaterialSymbol } from "react-material-symbols";
 
 import illustrasiPapan from "~/assets/images/illustrasiPapan.webp";
 import { buttonVariants } from "~/components/Button";
 import Footer from "~/components/Footer";
+import MadingCard from "~/components/MadingCard";
 import NavBar from "~/components/NavBar";
 
 const Home: NextPage = () => {
@@ -43,14 +45,71 @@ const Home: NextPage = () => {
             width={617}
             height={420}
             alt="Gambar dekoratif papan majalah dinding."
-            className="position absolute bottom-0 right-0 z-0"
+            className="absolute bottom-0 right-0 z-0"
           />
         </section>
         <section id="madingPenting" className="px-20 pt-16">
-          <h2>Mading Penting</h2>
+          <header className="mb-6 flex items-center justify-between">
+            <h2 className="flex items-center gap-3 font-mono text-lg font-bold text-mono-black">
+              <MaterialSymbol
+                icon="notification_important"
+                size={32}
+                fill={false}
+                weight={400}
+                grade={0}
+              />
+              Mading Penting
+            </h2>
+            <Link href={"/madings/penting"} className="group flex items-center gap-2 font-mono text-mono-black">
+              <span className="transition-transform duration-150 ease-out-expo group-hover:-translate-x-2 group-hover:underline">
+                Lihat Selengkapnya
+              </span>
+              <MaterialSymbol
+                icon="arrow_forward"
+                fill={false}
+                weight={200}
+                grade={0}
+                size={24}
+              />
+            </Link>
+          </header>
+
+          <article className="flex flex-wrap justify-between gap-y-8">
+            <MadingCard />
+            <MadingCard />
+            <MadingCard />
+          </article>
         </section>
         <section id="madingTerbaru" className="px-20 py-16">
-          <h2>Mading Terbaru</h2>
+        <header className="mb-6 flex items-center justify-between">
+            <h2 className="flex items-center gap-3 font-mono text-lg font-bold text-mono-black">
+              <MaterialSymbol
+                icon="notifications_active"
+                size={32}
+                fill={false}
+                weight={400}
+                grade={0}
+              />
+              Mading Terbaru
+            </h2>
+            <Link href={"/madings/terbaru"} className="group flex items-center gap-2 font-mono text-mono-black">
+              <span className="transition-transform duration-150 ease-out-expo group-hover:-translate-x-2 group-hover:underline">
+                Lihat Selengkapnya
+              </span>
+              <MaterialSymbol
+                icon="arrow_forward"
+                fill={false}
+                weight={200}
+                grade={0}
+                size={24}
+              />
+            </Link>
+          </header>
+          <article className="flex flex-wrap justify-between gap-y-8">
+            <MadingCard />
+            <MadingCard />
+            <MadingCard />
+          </article>
         </section>
       </main>
       <Footer />

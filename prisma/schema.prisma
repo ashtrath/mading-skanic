@@ -41,12 +41,13 @@ model Madings {
     slug        String     @db.VarChar(255)
     description String     @db.Text
     thumbnail   String     @db.VarChar(255)
-    article     String     @db.Text
+    article     String?    @db.Text
     approved    Boolean    @default(false)
     priority    Priorities
     categoryId  Int
-    createdAt   DateTime   @default(now())
     publishedAt DateTime?
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime?
 
     category  Categories  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
     author    Users       @relation(fields: [authorId], references: [id], onDelete: Cascade)
