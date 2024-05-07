@@ -15,7 +15,7 @@ datasource db {
 }
 
 model Users {
-    id              String    @id @default(uuid())
+    id              String    @id @default(cuid())
     namaSiswa       String
     username        String    @db.VarChar(8)
     email           String
@@ -35,7 +35,7 @@ model Users {
 }
 
 model Madings {
-    id          Int        @id @default(autoincrement())
+    id          String     @id @default(cuid())
     authorId    String
     title       String     @db.VarChar(100)
     slug        String     @db.VarChar(255)
@@ -44,7 +44,7 @@ model Madings {
     article     String?    @db.Text
     approved    Boolean    @default(false)
     priority    Priorities
-    categoryId  Int
+    categoryId  String
     publishedAt DateTime?
     createdAt   DateTime   @default(now())
     updatedAt   DateTime?
@@ -62,9 +62,9 @@ model Madings {
 }
 
 model Comments {
-    id       Int    @id @default(autoincrement())
+    id       String @id @default(cuid())
     userId   String
-    madingId Int
+    madingId String
     comment  String @db.Text
 
     user   Users   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -73,7 +73,7 @@ model Comments {
 
 model Likes {
     userId    String
-    madingId  Int
+    madingId  String
     createdAt DateTime @default(now())
 
     user   Users   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -86,7 +86,7 @@ model Likes {
 
 model Bookmarks {
     userId    String
-    madingId  Int
+    madingId  String
     createdAt DateTime @default(now())
 
     user   Users   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -98,7 +98,7 @@ model Bookmarks {
 }
 
 model Categories {
-    id        Int       @id @default(autoincrement())
+    id        String    @id @default(cuid())
     name      String    @db.VarChar(30)
     createdAt DateTime  @default(now())
     Madings   Madings[]
@@ -107,10 +107,10 @@ model Categories {
 }
 
 model Analytics {
-    id        Int    @id @default(autoincrement())
+    id        String @id @default(cuid())
     views     BigInt @default(0) @db.UnsignedBigInt
     bookmarks BigInt @default(0) @db.UnsignedBigInt
-    madingId  Int
+    madingId  String
 
     madings Madings @relation(fields: [madingId], references: [id], onDelete: Cascade)
 
