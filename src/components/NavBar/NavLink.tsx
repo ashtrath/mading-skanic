@@ -29,7 +29,7 @@ const NavLink = ({
         grade={0}
         size={24}
       />
-      <span className="font-mono no-underline underline-offset-0 underline-offset-4 group-hover:underline">
+      <span className="font-mono no-underline underline-offset-4 group-hover:underline">
         {children}
       </span>
     </Link>
