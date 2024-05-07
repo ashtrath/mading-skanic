@@ -1,4 +1,5 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import { type Roles } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { type GetServerSidePropsContext } from "next";
 import {
@@ -23,6 +24,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
       id: string;
+      role: Roles;
     };
   }
 }
@@ -99,6 +101,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: user.username,
+          role: user.role,
         };
       },
     }),
