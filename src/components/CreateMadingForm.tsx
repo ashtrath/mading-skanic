@@ -1,6 +1,5 @@
-import { Priorities } from "@prisma/client";
+import { type Categories } from "@prisma/client";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
 import { api } from "~/utils/api";
@@ -15,14 +14,14 @@ const CreateMadingForm = () => {
     formState: { errors },
   } = useForm<IMading>();
 
-  const mutation = api.mading.createMading.useMutation();
-  const [priorityValue, setPriorityValue] = useState(Priorities.Normal);
-
+  const createMutation = api.mading.createMading.useMutation();
   const onSubmit: SubmitHandler<IMading> = (data, e) => {
     e?.preventDefault();
 
-    mutation.mutate({ ...data });
+    createMutation.mutate({ ...data });
   };
+
+  const getCategory = api.category.getAllCategory.useQuery();
 
   return (
     <div className="radius flex flex-col items-center gap-2 border p-4">
@@ -56,8 +55,6 @@ const CreateMadingForm = () => {
           <input
             type="checkbox"
             placeholder="Tandai sebagai penting!"
-            value={priorityValue}
-            onClick={(e) => setPriorityValue(Priorities)}
             id="prioritas"
             {...register("priority", {})}
           />
@@ -68,14 +65,19 @@ const CreateMadingForm = () => {
         <label>Kategori</label>
         <select
           className="rounded border bg-white px-4 py-1"
-          {...register("category.id", { required: true, valueAsNumber: true })}
+          {...register("categoryId", { required: true })}
         >
-          <option value={1}>Kategori 1</option>
-          <option value={2}>Kategori 2</option>
-          <option value={3}>Kategori 3</option>
-          <option value={4}>Kategori 4</option>
+          {getCategory.data?.map((category: Categories) => {
+            console.log(category.id);
+
+            return (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            );
+          })}
         </select>
-        {errors.category && <span>This field is required</span>}
+        {errors.categoryId && <span>This field is required</span>}
         <label>Artikel</label>
         <textarea
           className="rounded border px-4 py-1"
@@ -84,7 +86,7 @@ const CreateMadingForm = () => {
         {errors.description && <span>This field is required</span>}
         <input
           type="submit"
-          disabled={mutation.isPending}
+          disabled={createMutation.isPending}
           className="rounded border px-4 py-1"
         />
       </form>

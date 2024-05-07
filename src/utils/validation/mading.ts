@@ -1,6 +1,4 @@
-import { Priorities } from "@prisma/client";
 import z from "zod";
-import { categorySchema } from "./category";
 
 export const madingSchema = z.object({
   title: z
@@ -10,8 +8,8 @@ export const madingSchema = z.object({
   description: z.string().min(5, "Judul harus memiliki setidaknya 5 karakter"),
   thumbnail: z.string(),
   article: z.string().optional(),
-  priority: z.nativeEnum(Priorities).default("Normal"),
-  category: categorySchema,
+  priority: z.boolean().optional(),
+  categoryId: z.string(),
 });
 
 export type IMading = z.infer<typeof madingSchema>;

@@ -1,3 +1,4 @@
+import { Priorities } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import slugify from "slugify";
 import { madingSchema } from "~/utils/validation/mading";
@@ -12,6 +13,10 @@ export const madingRouter = createTRPCRouter({
         strict: true,
       });
 
+      const priority = input.priority
+        ? Priorities.Important
+        : Priorities.Normal;
+
       const transactionResult = await ctx.db.$transaction(async () => {
         const newMading = await ctx.db.madings.create({
           data: {
@@ -21,8 +26,8 @@ export const madingRouter = createTRPCRouter({
             description: input.description,
             thumbnail: input.thumbnail,
             article: input.article,
-            priority: input.priority,
-            categoryId: input.category.id,
+            priority: priority,
+            categoryId: input.categoryId,
           },
         });
 
