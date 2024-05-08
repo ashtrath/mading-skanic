@@ -5,6 +5,7 @@ import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
   type DefaultSession,
+  type DefaultUser,
   type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
@@ -27,6 +28,16 @@ declare module "next-auth" {
       role: Roles;
     };
   }
+
+  interface User extends DefaultUser {
+    role: Roles;
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    role: Roles;
+  }
 }
 
 /**
@@ -41,6 +52,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.name = user.name;
+        token.role = user.role;
       }
 
       return token;
@@ -48,6 +60,7 @@ export const authOptions: NextAuthOptions = {
     session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.id as string;
+        session.user.role = token.role;
       }
 
       return session;
