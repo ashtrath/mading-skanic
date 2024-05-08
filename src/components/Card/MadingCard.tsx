@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { MaterialSymbol } from "react-material-symbols";
 import image from "~/assets/images/asd.jpg";
-import ProfileImage from "./ProfileImage";
 import { truncateText } from "~/utils";
+import ProfileImage from "../ui/ProfileImage";
 
 const MadingCard = () => {
   return (
@@ -15,7 +15,7 @@ const MadingCard = () => {
           width={343}
           height={343}
           alt="Mading Title's Image"
-          className="max-h-[200px] w-fit border-b border-b-mono-black object-contain"
+          className="max-h-[200px] w-full border-b border-b-mono-black object-contain"
         />
       </Link>
       <section className="p-4">

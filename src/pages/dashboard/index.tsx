@@ -1,7 +1,7 @@
 import type { GetServerSideProps, NextPage } from "next";
 import { getServerAuthSession } from "~/server/auth";
 
-import CreateMadingForm from "~/components/CreateMadingForm";
+import CreateMadingForm from "~/components/Form/CreateMadingForm";
 
 const Dashboard: NextPage = () => {
   return (

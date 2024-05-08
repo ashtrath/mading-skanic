@@ -1,7 +1,7 @@
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { MaterialSymbol } from "react-material-symbols";
-import { Dropdown, DropdownItem } from "../Dropdown";
+import { Dropdown, DropdownItem } from "../ui/Dropdown";
 import NavLink from "./NavLink";
 
 const NavBar = () => {

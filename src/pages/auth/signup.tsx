@@ -1,7 +1,7 @@
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 
-import { RegisterForm } from "~/components/RegisterForm";
+import { RegisterForm } from "~/components/Form/RegisterForm";
 import { getServerAuthSession } from "~/server/auth";
 
 const Register: NextPage = () => {

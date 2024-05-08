@@ -5,10 +5,10 @@ import Link from "next/link";
 import { MaterialSymbol } from "react-material-symbols";
 
 import illustrasiPapan from "~/assets/images/illustrasiPapan.webp";
-import { buttonVariants } from "~/components/Button";
-import Footer from "~/components/Footer";
-import MadingCard from "~/components/MadingCard";
-import NavBar from "~/components/NavBar";
+import MadingCard from "~/components/Card/MadingCard";
+import Footer from "~/components/Layout/Footer";
+import NavBar from "~/components/Layout/NavBar";
+import { buttonVariants } from "~/components/ui/Button";
 
 const Home: NextPage = () => {
   return (
