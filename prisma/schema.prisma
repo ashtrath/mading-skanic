@@ -17,7 +17,7 @@ datasource db {
 model Users {
     id              String    @id @default(cuid())
     namaSiswa       String
-    username        String    @db.VarChar(8)
+    username        String    @db.VarChar(16)
     email           String
     password        String    @db.VarChar(255)
     nisn            String    @db.VarChar(11)
