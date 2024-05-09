@@ -1,5 +1,5 @@
 import { cva } from "class-variance-authority";
-import { type ReactNode } from "react";
+import { type ButtonHTMLAttributes, type ReactNode } from "react";
 
 type ButtonVariantProps = {
   intent?: "primary" | "secondary" | "warning" | "danger";
@@ -7,10 +7,10 @@ type ButtonVariantProps = {
 };
 
 type ButtonProps = ButtonVariantProps & {
-  icon?: "left" | "right";
   className?: string;
+  hoverEffect?: boolean;
   children: ReactNode;
-};
+} & ButtonHTMLAttributes<HTMLButtonElement>;
 
 type ButtonVariantFunction = (props: ButtonVariantProps) => string;
 
@@ -40,14 +40,14 @@ export const buttonVariants: ButtonVariantFunction = cva(
 const Button = ({
   intent,
   size,
-  icon,
   className,
+  hoverEffect = true,
   children,
   ...props
 }: ButtonProps) => {
   return (
     <button
-      className={`${buttonVariants({ intent, size })} ${className}`}
+      className={`${buttonVariants({ intent, size })} ${className} ${hoverEffect && "no-underline underline-offset-4 hover:underline"}`}
       {...props}
     >
       {children}

@@ -1,9 +1,12 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
+import { MaterialSymbol } from "react-material-symbols";
 import { api } from "~/utils/api";
 import type { IRegister } from "~/utils/validation/auth";
+import Button, { buttonVariants } from "../ui/Button";
 
 export const RegisterForm = () => {
   const router = useRouter();
@@ -26,59 +29,90 @@ export const RegisterForm = () => {
   };
 
   return (
-    <div className="radius flex flex-col items-center gap-2 border p-4">
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
-        {errorMessage && (
-          <p className="text-center text-red-600">{errorMessage}</p>
-        )}
-        <label>Nama Lengkap</label>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
+        <label htmlFor="namaSiswa" className="font-mono text-sm uppercase">
+          Nama Lengkap
+        </label>
         <input
-          className="rounded border px-4 py-1"
+          id="namaSiswa"
           type="text"
+          className="border-mono-black bg-mono-white p-2.5 text-sm focus:border-x-2 focus:border-mono-black focus:ring-0"
           {...register("namaSiswa", { required: true })}
         />
-        {errors.namaSiswa && (
-          <p className="text-center text-red-600">This field is required</p>
-        )}
-        <label>Email</label>
+      </div>
+      <div className="flex flex-col gap-1">
+        <label htmlFor="email" className="font-mono text-sm uppercase">
+          Email
+        </label>
         <input
-          className="rounded border px-4 py-1"
+          id="email"
           type="text"
+          className="border-mono-black bg-mono-white p-2.5 text-sm focus:border-x-2 focus:border-mono-black focus:ring-0"
           {...register("email", { required: true })}
         />
-        {errors.email && (
-          <p className="text-center text-red-600">This field is required</p>
-        )}
-        <label>Username</label>
+      </div>
+      <div className="flex flex-col gap-1">
+        <label htmlFor="username" className="font-mono text-sm uppercase">
+          Username
+        </label>
         <input
-          className="rounded border px-4 py-1"
-          type="username"
+          id="username"
+          type="text"
+          className="border-mono-black bg-mono-white p-2.5 text-sm focus:border-x-2 focus:border-mono-black focus:ring-0"
           {...register("username", { required: true })}
         />
-        {errors.username && (
-          <p className="text-center text-red-600">This field is required</p>
-        )}
-        <label>NISN</label>
+      </div>
+      <div className="flex flex-col gap-1">
+        <label htmlFor="nisn" className="font-mono text-sm uppercase">
+          NISN
+        </label>
         <input
-          className="rounded border px-4 py-1"
+          id="nisn"
           type="text"
+          className="border-mono-black bg-mono-white p-2.5 text-sm focus:border-x-2 focus:border-mono-black focus:ring-0"
           {...register("nisn", { required: true })}
         />
-        {errors.username && (
-          <p className="text-center text-red-600">This field is required</p>
-        )}
-        <label>Password</label>
+      </div>
+      <div className="flex flex-col gap-1">
+        <label htmlFor="password" className="font-mono text-sm uppercase">
+          Password
+        </label>
         <input
-          className="rounded border px-4 py-1"
+          id="password"
           type="password"
+          className="border-mono-black bg-mono-white p-2.5 text-sm focus:border-x-2 focus:border-mono-black focus:ring-0"
           {...register("password", { required: true })}
         />
-        {errors.password && (
-          <p className="text-center text-red-600">This field is required</p>
-        )}
+      </div>
 
-        <input type="submit" className="rounded border px-4 py-1" />
-      </form>
-    </div>
+      <div className="mt-4 flex items-center gap-2">
+        <Link
+          href={"/auth/login"}
+          className={`${buttonVariants({ intent: "secondary" })} group`}
+        >
+          <span className="underline-offset-4 group-hover:underline">
+            Login
+          </span>
+        </Link>
+        <Button
+          type="submit"
+          intent="primary"
+          hoverEffect={false}
+          className="group flex items-center gap-1"
+        >
+          <span className="no-underline underline-offset-4 group-hover:underline">
+            Daftar
+          </span>
+          <MaterialSymbol
+            icon="arrow_forward"
+            fill={false}
+            weight={200}
+            grade={0}
+            size={20}
+          />
+        </Button>
+      </div>
+    </form>
   );
 };
