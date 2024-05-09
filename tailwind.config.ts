@@ -1,5 +1,6 @@
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
+import Forms from "@tailwindcss/forms";
 
 export default {
   content: ["./src/**/*.tsx"],
@@ -18,8 +19,11 @@ export default {
         },
       },
       transitionTimingFunction: {
-        'in-expo': 'cubic-bezier(0.64, 0.57, 0.67, 1.53)',
-        'out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
+        "in-expo": "cubic-bezier(0.64, 0.57, 0.67, 1.53)",
+        "out-expo": "cubic-bezier(0.19, 1, 0.22, 1)",
+      },
+      boxShadow: {
+        mono: "0 4px 8px 0 rgb(0,0,0,0.25)",
       },
     },
     fontSize: {
@@ -32,5 +36,5 @@ export default {
       "2xl": ["4.375rem", "70px"],
     },
   },
-  plugins: [],
+  plugins: [Forms],
 } satisfies Config;

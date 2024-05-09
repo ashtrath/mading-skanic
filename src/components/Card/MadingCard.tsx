@@ -7,7 +7,7 @@ import ProfileImage from "../ui/ProfileImage";
 
 const MadingCard = () => {
   return (
-    <article className="w-fit max-w-[343px] border border-mono-black shadow-[0_4px_8px_0_rgb(0,0,0,0.25)]">
+    <article className="shadow-mono w-fit max-w-[343px] border border-mono-black">
       <Link href={"/"} className="relative w-fit overflow-hidden">
         <Image
           loading="lazy"
