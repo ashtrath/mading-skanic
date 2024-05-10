@@ -6,7 +6,7 @@ import {
   differenceInWeeks,
 } from "date-fns";
 
-export function formatTimeAgo(timestamp: Date): string {
+export const formatTimeAgo = (timestamp: Date): string => {
   const now = new Date();
   const secondsDiff = differenceInSeconds(now, timestamp);
   const minutesDiff = differenceInMinutes(now, timestamp);
@@ -25,12 +25,39 @@ export function formatTimeAgo(timestamp: Date): string {
   } else {
     return `${weeksDiff}w`;
   }
-}
+};
 
-export function truncateText(text: string, maxLength: number) {
+export const truncateText = (text: string, maxLength: number): string => {
   if (text.length > maxLength) {
     return text.slice(0, maxLength) + "...";
   } else {
     return text;
   }
-}
+};
+
+export const dataURLToBlob = async (dataURL: string): Promise<Blob> => {
+  const res = await fetch(dataURL);
+  const blob = await res.blob();
+  return blob;
+};
+
+export const imageToBlobHandler = (file: File): Promise<File | null> => {
+  return new Promise((resolve, reject) => {
+    if (!file) resolve(null);
+
+    const reader = new FileReader();
+
+    reader.onload = async function (event) {
+      const dataURL = event.target?.result as string;
+      const blob = await dataURLToBlob(dataURL);
+      const imageFile = new File([blob], file.name, { type: file.type });
+      resolve(imageFile);
+    };
+
+    reader.onerror = function (event) {
+      reject(event.target?.error);
+    };
+
+    reader.readAsDataURL(file);
+  });
+};

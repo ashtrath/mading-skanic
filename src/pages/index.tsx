@@ -35,7 +35,7 @@ const Home: NextPage = () => {
             </p>
             <Link
               href={"/madings"}
-              className={buttonVariants({ intent: "primary" })}
+              className={`${buttonVariants({ intent: "primary" })} no-underline underline-offset-4 hover:underline`}
             >
               Baca Mading
             </Link>

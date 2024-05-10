@@ -54,11 +54,11 @@ export const LoginForm = () => {
             className="border-mono-black bg-mono-white text-mono-black focus:outline-none focus:ring-0 focus:ring-offset-0"
           />
           <label htmlFor="remember-credentials" className="text-xs">
-            Remember Me?
+            Ingat Saya
           </label>
         </div>
         <Link href={"/auth/reset-password"} className="text-xs hover:underline">
-          Forgot Password?
+          Lupa Password?
         </Link>
       </div>
 

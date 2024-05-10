@@ -6,7 +6,7 @@ export const madingSchema = z.object({
     .min(5, "Judul harus memiliki setidaknya 5 karakter")
     .max(100, "Judul tidak dapat melebihi 100 karakter"),
   description: z.string().min(5, "Judul harus memiliki setidaknya 5 karakter"),
-  thumbnail: z.string(),
+  thumbnail: z.string().nullable(),
   article: z.string().optional(),
   priority: z.boolean().optional(),
   categoryId: z.string(),

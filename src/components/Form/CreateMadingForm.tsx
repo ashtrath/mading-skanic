@@ -1,9 +1,12 @@
 import { type Categories } from "@prisma/client";
 import { useRouter } from "next/router";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 
+import { imageToBlobHandler } from "~/utils";
 import { api } from "~/utils/api";
+import { useUploadThing } from "~/utils/uploadthing";
 import { type IMading } from "~/utils/validation/mading";
+import ImageUpload from "../Input/ImageUpload";
 
 const CreateMadingForm = () => {
   const router = useRouter();
@@ -12,6 +15,8 @@ const CreateMadingForm = () => {
     register,
     handleSubmit,
     formState: { errors },
+    control,
+    setValue,
   } = useForm<IMading>();
 
   const createMutation = api.mading.createMading.useMutation();
@@ -22,6 +27,8 @@ const CreateMadingForm = () => {
   };
 
   const getCategory = api.category.getAllCategory.useQuery();
+
+  const { startUpload, isUploading } = useUploadThing("madingThumbnail");
 
   return (
     <div className="radius flex flex-col items-center gap-2 border p-4">
@@ -45,13 +52,39 @@ const CreateMadingForm = () => {
         />
         {errors.description && <span>This field is required</span>}
         <label>Thumbnail</label>
-        <input
-          className="rounded border px-4 py-1"
-          type="text"
-          {...register("thumbnail", { required: true })}
+        <Controller
+          name="thumbnail"
+          control={control}
+          render={() => (
+            <ImageUpload
+              minHeight={"10rem"}
+              customTypes=".png,.jpg,.jpeg,.webp"
+              recommendedText="Recommended dimension is 1600 x 840"
+              handleChange={async (event) => {
+                const file = event?.target?.files?.[0];
+                if (!file) return;
+
+                const image = await imageToBlobHandler(file);
+                if (!image) return;
+
+                if (isUploading) {
+                  console.log("Already Uploading");
+                  return;
+                }
+
+                const uploaded = await startUpload([image]);
+                if (!uploaded) {
+                  console.log("Failed to upload!");
+                  return;
+                }
+
+                setValue("thumbnail", uploaded[0]?.url ?? null);
+              }}
+            />
+          )}
         />
         {errors.thumbnail && <span>This field is required</span>}
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <input
             type="checkbox"
             placeholder="Tandai sebagai penting!"

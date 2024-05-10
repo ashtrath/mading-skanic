@@ -47,7 +47,7 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      className={`${buttonVariants({ intent, size })} ${className} ${hoverEffect && "no-underline underline-offset-4 hover:underline"}`}
+      className={`${buttonVariants({ intent, size })} ${className} ${hoverEffect ? "no-underline underline-offset-4 hover:underline" : ""}`}
       {...props}
     >
       {children}

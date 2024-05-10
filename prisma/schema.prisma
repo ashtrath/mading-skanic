@@ -40,7 +40,7 @@ model Madings {
     title       String     @db.VarChar(100)
     slug        String     @db.VarChar(255)
     description String     @db.Text
-    thumbnail   String     @db.VarChar(255)
+    thumbnail   String?    @db.VarChar(255)
     article     String?    @db.Text
     approved    Boolean    @default(false)
     priority    Priorities
