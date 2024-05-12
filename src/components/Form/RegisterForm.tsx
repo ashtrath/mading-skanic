@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 
 import { MaterialSymbol } from "react-material-symbols";
 import { api } from "~/utils/api";
 import type { IRegister } from "~/utils/validation/auth";
+import Input from "../Input/Input";
 import Button, { buttonVariants } from "../ui/Button";
 
 export const RegisterForm = () => {
@@ -17,11 +18,7 @@ export const RegisterForm = () => {
     onSuccess: () => router.push("/auth/login"),
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IRegister>();
+  const { control, handleSubmit } = useForm<IRegister>();
 
   const onSubmit: SubmitHandler<IRegister> = async (data) => {
     setErrorMessage(undefined);
@@ -31,58 +28,46 @@ export const RegisterForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
       <div className="flex flex-col gap-1">
-        <label htmlFor="namaSiswa" className="font-mono text-sm uppercase">
-          Nama Lengkap
-        </label>
-        <input
-          id="namaSiswa"
-          type="text"
-          className="border-mono-black bg-mono-white p-2.5 text-sm focus:border-x-2 focus:border-mono-black focus:ring-0"
-          {...register("namaSiswa", { required: true })}
+        <Controller
+          control={control}
+          name="namaSiswa"
+          render={({ field }) => (
+            <Input label="Nama Lengkap" type="text" {...field} />
+          )}
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="email" className="font-mono text-sm uppercase">
-          Email
-        </label>
-        <input
-          id="email"
-          type="text"
-          className="border-mono-black bg-mono-white p-2.5 text-sm focus:border-x-2 focus:border-mono-black focus:ring-0"
-          {...register("email", { required: true })}
+        <Controller
+          control={control}
+          name="email"
+          render={({ field }) => (
+            <Input label="Email" type="email" {...field} />
+          )}
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="username" className="font-mono text-sm uppercase">
-          Username
-        </label>
-        <input
-          id="username"
-          type="text"
-          className="border-mono-black bg-mono-white p-2.5 text-sm focus:border-x-2 focus:border-mono-black focus:ring-0"
-          {...register("username", { required: true })}
+        <Controller
+          control={control}
+          name="username"
+          render={({ field }) => (
+            <Input label="Username" type="text" {...field} />
+          )}
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="nisn" className="font-mono text-sm uppercase">
-          NISN
-        </label>
-        <input
-          id="nisn"
-          type="text"
-          className="border-mono-black bg-mono-white p-2.5 text-sm focus:border-x-2 focus:border-mono-black focus:ring-0"
-          {...register("nisn", { required: true })}
+        <Controller
+          control={control}
+          name="nisn"
+          render={({ field }) => <Input label="NISN" type="text" {...field} />}
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="password" className="font-mono text-sm uppercase">
-          Password
-        </label>
-        <input
-          id="password"
-          type="password"
-          className="border-mono-black bg-mono-white p-2.5 text-sm focus:border-x-2 focus:border-mono-black focus:ring-0"
-          {...register("password", { required: true })}
+        <Controller
+          control={control}
+          name="password"
+          render={({ field }) => (
+            <Input label="Password" type="password" {...field} />
+          )}
         />
       </div>
 

@@ -1,18 +1,23 @@
-import { type Categories } from "@prisma/client";
 import { useRouter } from "next/router";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 
+import { MaterialSymbol } from "react-material-symbols";
 import { imageToBlobHandler } from "~/utils";
 import { api } from "~/utils/api";
 import { useUploadThing } from "~/utils/uploadthing";
 import { type IMading } from "~/utils/validation/mading";
+
+import Checkbox from "../Input/Checkbox";
 import ImageUpload from "../Input/ImageUpload";
+import Input from "../Input/Input";
+import Select from "../Input/Select";
+import TextArea from "../Input/TextArea";
+import Button from "../ui/Button";
 
 const CreateMadingForm = () => {
   const router = useRouter();
   const { error } = router.query;
   const {
-    register,
     handleSubmit,
     formState: { errors },
     control,
@@ -38,25 +43,27 @@ const CreateMadingForm = () => {
             Posting mading gagal, coba lagi!
           </p>
         )}
-        <label>Judul Mading</label>
-        <input
-          className="rounded border px-4 py-1"
-          type="text"
-          {...register("title", { required: true })}
+        <Controller
+          control={control}
+          name="title"
+          rules={{ required: true, minLength: 5, maxLength: 100 }}
+          render={({ field }) => <Input label="Judul" type="text" {...field} />}
         />
         {errors.title && <span>This field is required</span>}
-        <label>Deskripsi</label>
-        <textarea
-          className="rounded border px-4 py-1"
-          {...register("description", { required: true })}
+        <Controller
+          control={control}
+          name="description"
+          rules={{ required: true, minLength: 5, maxLength: 100 }}
+          render={({ field }) => <TextArea label="Deskripsi" {...field} />}
         />
         {errors.description && <span>This field is required</span>}
-        <label>Thumbnail</label>
+        <label className="font-mono text-sm uppercase">Thumbnail</label>
         <Controller
           name="thumbnail"
           control={control}
-          render={() => (
+          render={({ field }) => (
             <ImageUpload
+              {...field}
               minHeight={"10rem"}
               customTypes=".png,.jpg,.jpeg,.webp"
               recommendedText="Recommended dimension is 1600 x 840"
@@ -84,44 +91,70 @@ const CreateMadingForm = () => {
           )}
         />
         {errors.thumbnail && <span>This field is required</span>}
-        <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            placeholder="Tandai sebagai penting!"
-            id="prioritas"
-            {...register("priority", {})}
-          />
-          <label htmlFor="prioritas">Tandai sebagai penting!</label>
-        </div>
-        <label htmlFor=""></label>
+        <Controller
+          control={control}
+          name="priority"
+          defaultValue={false}
+          render={({ field: { name, onChange, value } }) => (
+            <Checkbox
+              name={name}
+              onChange={onChange}
+              checked={value}
+              required={false}
+              label="Tandai sebagai mading penting!"
+            />
+          )}
+        />
         {errors.priority && <span>This field is required</span>}
-        <label>Kategori</label>
-        <select
-          className="rounded border bg-white px-4 py-1"
-          {...register("categoryId", { required: true })}
-        >
-          {getCategory.data?.map((category: Categories) => {
-            console.log(category.id);
-
-            return (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            );
-          })}
-        </select>
+        {getCategory.data && (
+          <Controller
+            control={control}
+            name="categoryId"
+            render={({ field: { name, onChange } }) => (
+              <Select
+                name={name}
+                label="Kategori"
+                defaultText="Kategori"
+                options={(() => {
+                  const res = getCategory.data?.map(({ id, name }) => ({
+                    label: name,
+                    value: id,
+                  }));
+                  console.log(res);
+                  return res;
+                })()}
+                onChange={(event) => {
+                  onChange(event.value);
+                }}
+              />
+            )}
+          />
+        )}
         {errors.categoryId && <span>This field is required</span>}
-        <label>Artikel</label>
-        <textarea
-          className="rounded border px-4 py-1"
-          {...register("article", {})}
+        <Controller
+          control={control}
+          name="article"
+          render={({ field }) => <TextArea label="Artikel" {...field} />}
         />
         {errors.description && <span>This field is required</span>}
-        <input
+        <Button
           type="submit"
-          disabled={createMutation.isPending}
-          className="rounded border px-4 py-1"
-        />
+          intent="primary"
+          hoverEffect={false}
+          className="group flex items-center justify-center gap-1"
+          disabled={isUploading}
+        >
+          <span className="no-underline underline-offset-4 group-hover:underline">
+            Submit
+          </span>
+          <MaterialSymbol
+            icon="upload_file"
+            fill={false}
+            weight={200}
+            grade={0}
+            size={20}
+          />
+        </Button>
       </form>
     </div>
   );

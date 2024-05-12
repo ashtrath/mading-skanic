@@ -1,30 +1,24 @@
-type InputProps = {
+type TextAreaProps = {
   name: string;
   label?: string;
   placeholder?: string;
-  type: "email" | "text" | "password";
   disabled?: boolean;
   required?: boolean;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  pattern?: string | undefined;
-  autoFocus?: boolean;
+  value: string | undefined;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   className?: string;
 };
 
-const Input = ({
+const TextArea = ({
   name,
   label,
   placeholder = "",
-  type,
   disabled = false,
   required = true,
   value,
   onChange,
-  pattern = undefined,
-  autoFocus = false,
   className = "",
-}: InputProps) => {
+}: TextAreaProps) => {
   return (
     <>
       {label && (
@@ -32,15 +26,12 @@ const Input = ({
           {label}
         </label>
       )}
-      <input
+      <textarea
         id={name}
-        type={type}
         placeholder={placeholder}
         disabled={disabled}
         required={required}
         autoComplete="off"
-        pattern={pattern}
-        autoFocus={autoFocus}
         value={value}
         onChange={onChange}
         className={`border-mono-black bg-mono-white p-2.5 text-sm text-mono-black focus:border-x-2 focus:border-mono-black focus:ring-0 ${className}`}
@@ -49,4 +40,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default TextArea;
