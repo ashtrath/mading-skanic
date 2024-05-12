@@ -1,19 +1,16 @@
 import { Priorities } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import slugify from "slugify";
-import { madingSchema } from "~/utils/validation/mading";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+
+import { slugSettings } from "~/utils/constant";
+import { madingSchema } from "~/utils/validation/mading";
 
 export const madingRouter = createTRPCRouter({
   createMading: protectedProcedure
     .input(madingSchema)
     .mutation(async ({ ctx, input }) => {
-      const slug = slugify(input.title, {
-        lower: true,
-        replacement: "-",
-        strict: true,
-        trim: true,
-      });
+      const slug = slugify(input.title, slugSettings);
 
       const priority = input.priority
         ? Priorities.Important

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MaterialSymbol } from "react-material-symbols";
 
 type CheckboxProps = {
@@ -6,6 +6,7 @@ type CheckboxProps = {
   label: string;
   disabled?: boolean;
   required?: boolean;
+  value: string | undefined;
   checked: boolean | undefined;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   autoFocus?: boolean;
@@ -17,12 +18,19 @@ const Checkbox = ({
   label,
   disabled = false,
   required = true,
+  value,
   checked,
   onChange,
   autoFocus = false,
   className = "",
 }: CheckboxProps) => {
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(checked);
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(isChecked);
+    }
+  }, [isChecked])
 
   return (
     <label htmlFor={name} className="group flex items-center gap-2 text-sm">
@@ -31,12 +39,12 @@ const Checkbox = ({
         id={name}
         disabled={disabled}
         required={required}
-        checked={checked}
+        value={value}
+        checked={isChecked}
         autoComplete="off"
         autoFocus={autoFocus}
-        onChange={() => {
-          setIsChecked(!isChecked);
-          onChange;
+        onChange={(e) => {
+          setIsChecked(e.target.checked);
         }}
       />
       <MaterialSymbol

@@ -1,7 +1,6 @@
 import {
   createContext,
   useContext,
-  useEffect,
   useRef,
   useState,
   type Dispatch,
@@ -9,6 +8,7 @@ import {
   type SetStateAction,
 } from "react";
 import { MaterialSymbol } from "react-material-symbols";
+import { useClickOutside } from "~/utils";
 
 type DropdownProps = {
   title: string | null | undefined;
@@ -35,26 +35,7 @@ const Dropdown = ({ title, children, className }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleClickOutside: EventListener = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    window.addEventListener("mouseup", handleClickOutside);
-    window.addEventListener("touchend", handleClickOutside);
-
-    // Clean Up
-    return () => {
-      window.removeEventListener("mouseup", handleClickOutside);
-      window.removeEventListener("touchend", handleClickOutside);
-    };
-  }, [isOpen]);
+  useClickOutside(() => setIsOpen(false), [dropdownRef]);
 
   return (
     <DropdownContext.Provider value={{ isOpen, setIsOpen }}>
@@ -102,3 +83,4 @@ const DropdownItem = ({ children }: DropdownItemProps) => {
 };
 
 export { Dropdown, DropdownItem };
+

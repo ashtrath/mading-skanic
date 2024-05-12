@@ -3,7 +3,7 @@ import { getServerAuthSession } from "~/server/auth";
 
 import CreateMadingForm from "~/components/Form/CreateMadingForm";
 
-const Dashboard: NextPage = () => {
+const DashboardPage: NextPage = () => {
   return (
     <>
       <CreateMadingForm />
@@ -39,4 +39,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return { props: {} };
 };
 
-export default Dashboard;
+export default DashboardPage;

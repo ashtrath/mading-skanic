@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
+import { type PluginUtils } from "tailwindcss/types/config";
 
 import Forms from "@tailwindcss/forms";
+import Typography from "@tailwindcss/typography";
 
 export default {
   content: ["./src/**/*.{ts,tsx}"],
@@ -26,6 +29,13 @@ export default {
       boxShadow: {
         mono: "0 4px 8px 0 rgb(0,0,0,0.25)",
       },
+      typography: ({ theme }: PluginUtils) => ({
+        DEFAULT: {
+          css: {
+            color: theme("colors.mono.black"),
+          },
+        },
+      }),
     },
     fontSize: {
       xs: ["0.75rem", "16px"],
@@ -37,5 +47,5 @@ export default {
       "2xl": ["4.375rem", "70px"],
     },
   },
-  plugins: [Forms],
+  plugins: [Forms, Typography],
 } satisfies Config;

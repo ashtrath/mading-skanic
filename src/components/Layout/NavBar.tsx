@@ -4,11 +4,17 @@ import { MaterialSymbol } from "react-material-symbols";
 import { Dropdown, DropdownItem } from "../ui/Dropdown";
 import NavLink from "./NavLink";
 
-const NavBar = () => {
+type NavBarProps = {
+  isLandingPage?: boolean;
+};
+
+const NavBar = ({ isLandingPage }: NavBarProps) => {
   const { data: session } = useSession();
 
   return (
-    <nav className="fixed top-0 z-50 flex w-full items-center justify-between border-b border-b-mono-black bg-mono-white px-20 py-6">
+    <nav
+      className={`${isLandingPage ? "fixed" : "sticky"} top-0 z-50 flex w-full items-center justify-between border-b border-b-mono-black bg-mono-white px-20 py-6`}
+    >
       <h2 className="font-mono text-lg font-semibold text-mono-black">
         <Link href={"/"}>
           <span className="font-sans">Mading </span>Skanic

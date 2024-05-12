@@ -1,12 +1,14 @@
 import { useRouter } from "next/router";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 
+import { DevTool } from "@hookform/devtools";
 import { MaterialSymbol } from "react-material-symbols";
 import { imageToBlobHandler } from "~/utils";
 import { api } from "~/utils/api";
 import { useUploadThing } from "~/utils/uploadthing";
 import { type IMading } from "~/utils/validation/mading";
 
+import Editor from "../Editor";
 import Checkbox from "../Input/Checkbox";
 import ImageUpload from "../Input/ImageUpload";
 import Input from "../Input/Input";
@@ -98,9 +100,9 @@ const CreateMadingForm = () => {
           render={({ field: { name, onChange, value } }) => (
             <Checkbox
               name={name}
-              onChange={onChange}
-              checked={value}
+              value={false}
               required={false}
+              onChange={onChange}
               label="Tandai sebagai mading penting!"
             />
           )}
@@ -134,7 +136,9 @@ const CreateMadingForm = () => {
         <Controller
           control={control}
           name="article"
-          render={({ field }) => <TextArea label="Artikel" {...field} />}
+          render={({ field: { value, onChange } }) => (
+            <Editor label="Artikel" data={value} onChange={onChange} />
+          )}
         />
         {errors.description && <span>This field is required</span>}
         <Button
@@ -156,6 +160,7 @@ const CreateMadingForm = () => {
           />
         </Button>
       </form>
+      <DevTool control={control} />
     </div>
   );
 };

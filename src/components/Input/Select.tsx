@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { MaterialSymbol } from "react-material-symbols";
-import { useClickOutside } from "~/utils/component";
+import { useClickOutside } from "~/utils";
 
 type SelectProps = {
   name: string;

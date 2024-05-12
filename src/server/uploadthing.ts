@@ -4,7 +4,7 @@ const f = createUploadthing();
 
 export const ourFileRouter = {
   madingThumbnail: f({
-    image: { maxFileSize: "8MB", maxFileCount: 1 },
+    image: { maxFileSize: "4MB", maxFileCount: 1 },
   }).onUploadComplete(() => {
     console.log("Upload Complete!");
   }),
