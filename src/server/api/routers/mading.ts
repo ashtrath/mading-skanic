@@ -10,7 +10,9 @@ export const madingRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const slug = slugify(input.title, {
         lower: true,
+        replacement: "-",
         strict: true,
+        trim: true,
       });
 
       const priority = input.priority
