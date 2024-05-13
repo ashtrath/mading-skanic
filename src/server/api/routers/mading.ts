@@ -1,8 +1,10 @@
 import { Priorities } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import slugify from "slugify";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
+import { z } from "zod";
+import { getFilterByInput } from "~/utils";
 import { slugSettings } from "~/utils/constant";
 import { madingSchema } from "~/utils/validation/mading";
 
@@ -40,6 +42,62 @@ export const madingRouter = createTRPCRouter({
       return {
         createMading: transactionResult.newMading,
         success: true,
+      };
+    }),
+
+  getAllMading: publicProcedure
+    .input(
+      z.object({
+        limit: z.number(),
+        cursor: z.string().nullish(),
+        skip: z.number().optional(),
+        authorId: z.string().optional(),
+        categoryId: z.string().optional(),
+        filter: z.string().optional(),
+        query: z.string().optional(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const { limit, skip, cursor, filter } = input;
+
+      const madings = await ctx.db.madings.findMany({
+        take: limit + 1,
+        skip: skip,
+        cursor: cursor ? { id: cursor } : undefined,
+        ...(filter
+          ? { orderBy: getFilterByInput(filter) }
+          : {
+              orderBy: {
+                createdAt: "desc",
+              },
+            }),
+        include: {
+          author: true,
+          category: true,
+        },
+        ...(input.authorId && {
+          where: {
+            authorId: input.authorId,
+          },
+        }),
+        ...(input.categoryId && {
+          where: {
+            category: {
+              id: input.categoryId,
+            },
+          },
+        }),
+      });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (madings.length > limit) {
+        const nextItem = madings.pop();
+        nextCursor = nextItem?.id;
+      }
+
+      return {
+        madings,
+        nextCursor,
       };
     }),
 });

@@ -9,8 +9,18 @@ import MadingCard from "~/components/Card/MadingCard";
 import Footer from "~/components/Layout/Footer";
 import NavBar from "~/components/Layout/NavBar";
 import { buttonVariants } from "~/components/ui/Button";
+import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
+  const { data: getAllMading } = api.mading.getAllMading.useQuery(
+    {
+      limit: 3,
+    },
+    { refetchOnWindowFocus: false },
+  );
+
+  const madingToShow = getAllMading?.madings;
+
   return (
     <>
       <Head>
@@ -78,9 +88,9 @@ const Home: NextPage = () => {
           </header>
 
           <article className="flex flex-wrap justify-between gap-y-8">
-            <MadingCard />
-            <MadingCard />
-            <MadingCard />
+            {madingToShow?.map((mading) => (
+              <MadingCard key={mading.id} mading={mading} />
+            ))}
           </article>
         </section>
         <section id="madingTerbaru" className="px-20 py-16">
@@ -112,9 +122,9 @@ const Home: NextPage = () => {
             </Link>
           </header>
           <article className="flex flex-wrap justify-between gap-y-8">
-            <MadingCard />
-            <MadingCard />
-            <MadingCard />
+            {madingToShow?.map((mading) => (
+              <MadingCard key={mading.id} mading={mading} />
+            ))}
           </article>
         </section>
       </main>

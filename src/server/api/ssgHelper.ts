@@ -3,10 +3,10 @@ import SuperJSON from "superjson";
 import { appRouter } from "./root";
 import { createInnerTRPCContext } from "./trpc";
 
-export function ssgHelper() {
+export const generateSSGHelper = () => {
   return createServerSideHelpers({
     router: appRouter,
     ctx: createInnerTRPCContext({ session: null, revalidateSSG: null }),
     transformer: SuperJSON,
   });
-}
+};

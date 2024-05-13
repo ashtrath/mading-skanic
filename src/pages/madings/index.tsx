@@ -10,7 +10,7 @@ const MadingPage: NextPage = () => {
     <>
       <NavBar />
       <main className="my-16 flex min-h-screen flex-col gap-16 overflow-x-hidden px-20">
-        <Heading />
+        <Heading title="Mading" />
         <ListMading />
       </main>
       <Footer />

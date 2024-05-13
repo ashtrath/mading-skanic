@@ -67,9 +67,13 @@ export const imageToBlobHandler = (file: File): Promise<File | null> => {
       const blob = await dataURLToBlob(dataURL);
 
       const { fileName, fileType } = sliceFileName(file.name);
-      const imageFile = new File([blob], `${slugify(fileName, slugSettings)}.${fileType}`, {
-        type: file.type,
-      });
+      const imageFile = new File(
+        [blob],
+        `${slugify(fileName, slugSettings)}.${fileType}`,
+        {
+          type: file.type,
+        },
+      );
       resolve(imageFile);
     };
 
@@ -112,4 +116,19 @@ export const useClickOutside = (
       window.removeEventListener("touchend", handleClickOutside);
     };
   }, [excludedRefs]);
+};
+
+export const getFilterByInput = (filter?: string) => {
+  const filters: Record<string, object> = {
+    newest: {
+      createdAt: "desc",
+    },
+    oldest: {
+      createdAt: "asc",
+    },
+  };
+
+  if (typeof filter === "string") {
+    return filters[filter];
+  }
 };
