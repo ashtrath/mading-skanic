@@ -1,5 +1,4 @@
 import { type NextPage } from "next";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -83,7 +82,7 @@ const ArticlePage: NextPage = () => {
           </p>
         </header>
 
-        <div className="w-full">
+        <section className="w-full">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-8">
               <Link
@@ -121,7 +120,50 @@ const ArticlePage: NextPage = () => {
               className="max-h-[566px] w-full border border-mono-black object-contain"
             />
           </div>
-        </div>
+        </section>
+
+        <section className="mt-8 flex w-full items-center justify-between">
+          <aside className="flex w-fit max-w-[430px] flex-col gap-4 border border-mono-black bg-mono-white px-8 py-4">
+            <div className="space-y-1">
+              <h2 className="line-clamp-2 font-mono text-lg font-semibold text-mono-black">
+                Kenali Tanda Bahaya Cyberbullying: Seminar Kesadaran Online
+                Untuk Siswa dan Orang Tua
+              </h2>
+              <Link
+                href={`/users/id`}
+                className="group flex items-center gap-1"
+              >
+                <ProfileImage src={null} />
+                <span className="font-mono text-sm text-mono-black underline-offset-4 group-hover:underline">
+                  @OSISMPK
+                </span>
+              </Link>
+            </div>
+            <ul className="space-y-2">
+              <li className="flex items-center justify-between">
+                <h3 className="font-mono font-bold text-mono-black">
+                  Publikasi:
+                </h3>
+                <p className="text-mono-black">04 Febuari 2024, 13:02</p>
+              </li>
+              <li className="flex items-center justify-between">
+                <h3 className="font-mono font-bold text-mono-black">
+                  Terakhir di Edit:
+                </h3>
+                <p className="text-mono-black">04 Febuari 2024, 13:02</p>
+              </li>
+              <li className="flex items-center justify-between">
+                <h3 className="font-mono font-bold text-mono-black">
+                  Kategori:
+                </h3>
+                <p className="text-mono-black">Jurusan</p>
+              </li>
+            </ul>
+          </aside>
+          <article className="prose">
+            
+          </article>
+        </section>
       </main>
       <Footer />
     </>
