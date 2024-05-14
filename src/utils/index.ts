@@ -1,34 +1,22 @@
-import {
-  differenceInDays,
-  differenceInHours,
-  differenceInMinutes,
-  differenceInSeconds,
-  differenceInWeeks,
-} from "date-fns";
+import { format, formatDistanceToNow, formatDistanceToNowStrict, isToday } from "date-fns";
 import { useEffect, useRef } from "react";
 import slugify from "slugify";
 
 import { slugSettings } from "./constant";
 
-export const formatTimeAgo = (timestamp: Date): string => {
-  const now = new Date();
-  const secondsDiff = differenceInSeconds(now, timestamp);
-  const minutesDiff = differenceInMinutes(now, timestamp);
-  const hoursDiff = differenceInHours(now, timestamp);
-  const daysDiff = differenceInDays(now, timestamp);
-  const weeksDiff = differenceInWeeks(now, timestamp);
+type Options = {
+  smart: boolean;
+};
 
-  if (secondsDiff < 60) {
-    return `${secondsDiff}s`;
-  } else if (minutesDiff < 60) {
-    return `${minutesDiff}m`;
-  } else if (hoursDiff < 24) {
-    return `${hoursDiff}h`;
-  } else if (daysDiff < 7) {
-    return `${daysDiff}d`;
-  } else {
-    return `${weeksDiff}w`;
-  }
+export const formatTimeAgo = (date: Date, options?: Options) => {
+  const dateToFormat = new Date(date);
+
+  if (options?.smart === true)
+    return format(dateToFormat, isToday(dateToFormat) ? "HH:mm" : "dd/MM/yyyy");
+
+  return formatDistanceToNowStrict(dateToFormat, {
+    addSuffix: true,
+  });
 };
 
 export const truncateText = (text: string, maxLength: number): string => {
