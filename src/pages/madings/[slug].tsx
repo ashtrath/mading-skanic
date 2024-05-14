@@ -1,4 +1,8 @@
-import { type NextPage } from "next";
+import {
+  type GetServerSidePropsContext,
+  type InferGetServerSidePropsType,
+  type NextPage,
+} from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -8,9 +12,15 @@ import Footer from "~/components/Layout/Footer";
 import NavBar from "~/components/Layout/NavBar";
 import Button from "~/components/ui/Button";
 import ProfileImage from "~/components/ui/ProfileImage";
+import { generateSSGHelper } from "~/server/api/ssgHelper";
 
-const ArticlePage: NextPage = () => {
+const ArticlePage: NextPage<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = (props) => {
   const router = useRouter();
+  const { id } = props;
+
+  // TODO: Fetch the mading data from database based on the passed id
 
   return (
     <>
@@ -160,9 +170,7 @@ const ArticlePage: NextPage = () => {
               </li>
             </ul>
           </aside>
-          <article className="prose">
-            
-          </article>
+          <article className="prose"></article>
         </section>
       </main>
       <Footer />
@@ -171,3 +179,23 @@ const ArticlePage: NextPage = () => {
 };
 
 export default ArticlePage;
+
+export const getServerSideProps = async (
+  ctx: GetServerSidePropsContext<{ id: string }>,
+) => {
+  const { req, res } = ctx;
+
+  const ssg = await generateSSGHelper({ req, res });
+  const madingId = ctx.params?.id!;
+
+  await ssg.mading.getSingleMading.prefetch({
+    id: madingId,
+  });
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      id: madingId,
+    },
+  };
+};

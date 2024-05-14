@@ -7,6 +7,7 @@ import ProfileImage from "../ui/ProfileImage";
 
 type MadingCardProps = {
   mading: {
+    id: string;
     title: string;
     slug: string;
     description: string;
@@ -37,7 +38,10 @@ const MadingCard = ({ mading }: MadingCardProps) => {
   return (
     <article className="w-fit max-w-[343px] border border-mono-black shadow-mono">
       <Link
-        href={`/madings/${mading.slug}`}
+        href={{
+          pathname: `/madings/${mading.id}`,
+        }}
+        as={`/madings/${mading.slug}`}
         className="relative overflow-hidden"
       >
         {mading.priority === "Important" && (
