@@ -53,8 +53,8 @@ const ImageUpload = ({
         >
           {showImage && image && !isUploading ? (
             <Image
-              width={1600}
-              height={840}
+              width={1200}
+              height={620}
               src={image} // it will convert base64 to url
               alt="preview"
               className={`${

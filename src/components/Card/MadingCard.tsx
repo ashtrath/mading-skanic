@@ -41,7 +41,7 @@ const MadingCard = ({ mading }: MadingCardProps) => {
         className="relative overflow-hidden"
       >
         {mading.priority === "Important" && (
-          <div className="absolute left-2 top-full z-10 flex items-center gap-1 rounded-full bg-mono-black px-4 py-1 text-mono-white">
+          <div className="absolute left-2 top-full z-10 flex w-fit items-center gap-1 rounded-full bg-mono-black px-4 py-1 text-mono-white">
             <MaterialSymbol
               icon="notifications_active"
               fill={false}
@@ -54,7 +54,7 @@ const MadingCard = ({ mading }: MadingCardProps) => {
         )}
         <Image
           loading="lazy"
-          src={mading.thumbnail}
+          src={mading.thumbnail!}
           width={343}
           height={343}
           alt={`${mading?.title}'s Image`}
@@ -64,7 +64,7 @@ const MadingCard = ({ mading }: MadingCardProps) => {
       <section className="p-4">
         <header className="mb-2 flex items-center justify-between">
           <Link
-            href={`/users/${mading.authorId}`}
+            href={`/users/${mading.author.id}`}
             className="group flex items-center gap-1"
           >
             <ProfileImage src={null} />
@@ -72,7 +72,7 @@ const MadingCard = ({ mading }: MadingCardProps) => {
               {mading.author.username}
             </span>
           </Link>
-          <p className="rounded-full border border-mono-black bg-mono-white px-4 py-1 font-mono text-xs font-medium uppercase text-mono-black">
+          <p className="w-fit rounded-full border border-mono-black bg-mono-white px-4 py-1 font-mono text-xs font-medium uppercase text-mono-black">
             {mading.category.name}
           </p>
         </header>
@@ -95,7 +95,7 @@ const MadingCard = ({ mading }: MadingCardProps) => {
               grade={0}
               size={24}
             />
-            {formatTimeAgo(mading.createdAt)}
+            {formatTimeAgo(mading.createdAt)} ago
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1">
