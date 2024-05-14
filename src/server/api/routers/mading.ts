@@ -2,10 +2,10 @@ import { Priorities } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
-import { z } from "zod";
 import slugify from "slugify";
+import { z } from "zod";
 
-import { getFilterByInput } from "~/utils";
+import { formatTimeAgo, getFilterByInput } from "~/utils";
 import { slugSettings } from "~/utils/constant";
 import { madingSchema } from "~/utils/validation/mading";
 
@@ -105,6 +105,31 @@ export const madingRouter = createTRPCRouter({
       return {
         madings,
         nextCursor,
+      };
+    }),
+
+  getSingleMading: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const madings = await ctx.db.madings.findFirst({
+        where: {
+          id: input.id,
+        },
+        include: {
+          author: true,
+          category: true,
+        },
+      });
+
+      const formattedDate = formatTimeAgo(madings!.createdAt, { smart: true });
+
+      return {
+        ...madings,
+        createdAt: formattedDate,
       };
     }),
 });
