@@ -55,7 +55,7 @@ const CreateMadingForm = () => {
         <Controller
           control={control}
           name="description"
-          rules={{ required: true, minLength: 5, maxLength: 100 }}
+          rules={{ required: true, minLength: 5 }}
           render={({ field }) => <TextArea label="Deskripsi" {...field} />}
         />
         {errors.description && <span>This field is required</span>}
@@ -140,7 +140,7 @@ const CreateMadingForm = () => {
             <Editor label="Artikel" data={value} onChange={onChange} />
           )}
         />
-        {errors.description && <span>This field is required</span>}
+        {errors.categoryId && <span>This field is required</span>}
         <Button
           type="submit"
           intent="primary"
