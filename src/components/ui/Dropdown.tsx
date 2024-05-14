@@ -41,11 +41,11 @@ const Dropdown = ({ title, children, className }: DropdownProps) => {
     <DropdownContext.Provider value={{ isOpen, setIsOpen }}>
       <div
         ref={dropdownRef}
-        className="flex w-36 flex-col items-center justify-center"
+        className="flex max-w-[200px] flex-col items-center justify-center"
       >
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={`flex h-auto min-h-10 w-full items-center justify-between break-words bg-mono-black px-4 py-2 font-mono text-mono-white ${className}`}
+          className={`flex h-auto min-h-10 w-full items-center justify-between gap-2 break-words bg-mono-black px-4 py-2 font-mono text-mono-white ${className}`}
         >
           {title}
           <MaterialSymbol
@@ -83,4 +83,3 @@ const DropdownItem = ({ children }: DropdownItemProps) => {
 };
 
 export { Dropdown, DropdownItem };
-

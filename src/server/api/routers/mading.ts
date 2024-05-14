@@ -1,9 +1,10 @@
 import { Priorities } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
-import slugify from "slugify";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 import { z } from "zod";
+import slugify from "slugify";
+
 import { getFilterByInput } from "~/utils";
 import { slugSettings } from "~/utils/constant";
 import { madingSchema } from "~/utils/validation/mading";
@@ -53,6 +54,7 @@ export const madingRouter = createTRPCRouter({
         skip: z.number().optional(),
         authorId: z.string().optional(),
         categoryId: z.string().optional(),
+        priority: z.nativeEnum(Priorities).optional(),
         filter: z.string().optional(),
         query: z.string().optional(),
       }),
@@ -75,6 +77,11 @@ export const madingRouter = createTRPCRouter({
           author: true,
           category: true,
         },
+        ...(input.priority && {
+          where: {
+            priority: input.priority,
+          },
+        }),
         ...(input.authorId && {
           where: {
             authorId: input.authorId,

@@ -57,6 +57,23 @@ const NavBar = ({ isLandingPage }: NavBarProps) => {
                       Profile
                     </Link>
                   </DropdownItem>
+                  {session.user.role !== "Siswa" && (
+                    <DropdownItem>
+                      <Link
+                        href={`/dashboard`}
+                        className="flex items-center gap-1 font-mono"
+                      >
+                        <MaterialSymbol
+                          icon={"space_dashboard"}
+                          fill={false}
+                          weight={200}
+                          grade={0}
+                          size={24}
+                        />
+                        Dashboard
+                      </Link>
+                    </DropdownItem>
+                  )}
                   <DropdownItem>
                     <button
                       onClick={() => signOut()}
@@ -77,7 +94,7 @@ const NavBar = ({ isLandingPage }: NavBarProps) => {
             </>
           ) : (
             <>
-              <div className="mx-2 h-8 w-px bg-mono-black"></div>
+              <li className="mx-2 h-8 w-px bg-mono-black"></li>
               <li className="mr-2">
                 <NavLink href={"/auth/signup"} icon="person_add">
                   Daftar
