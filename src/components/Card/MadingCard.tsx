@@ -69,7 +69,7 @@ const MadingCard = ({ mading }: MadingCardProps) => {
           >
             <ProfileImage src={null} />
             <span className="font-mono text-sm font-medium text-mono-black underline-offset-4 group-hover:underline">
-              {mading.author.username}
+              @{mading.author.username}
             </span>
           </Link>
           <p className="w-fit rounded-full border border-mono-black bg-mono-white px-4 py-1 font-mono text-xs font-medium uppercase text-mono-black">
@@ -78,7 +78,7 @@ const MadingCard = ({ mading }: MadingCardProps) => {
         </header>
         <section className="flex flex-col gap-1 text-mono-black">
           <Link href={`/madings/${mading?.slug}`}>
-            <h3 className="font-mono text-lg font-bold hover:underline">
+            <h3 className="line-clamp-2 font-mono text-lg font-bold hover:underline">
               {mading.title}
             </h3>
           </Link>
@@ -95,7 +95,7 @@ const MadingCard = ({ mading }: MadingCardProps) => {
               grade={0}
               size={24}
             />
-            {formatTimeAgo(mading.createdAt)} ago
+            {formatTimeAgo(mading.createdAt)}
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1">
