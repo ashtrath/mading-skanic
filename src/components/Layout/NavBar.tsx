@@ -44,7 +44,7 @@ const NavBar = ({ isLandingPage }: NavBarProps) => {
                 <Dropdown title={session.user.name}>
                   <DropdownItem>
                     <Link
-                      href={`/user/${encodeURIComponent(session.user.id)}`}
+                      href={`/u/${session.user.name}`}
                       className="flex items-center gap-1 font-mono"
                     >
                       <MaterialSymbol

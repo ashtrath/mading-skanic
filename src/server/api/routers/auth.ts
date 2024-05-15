@@ -21,7 +21,7 @@ export const authRouter = createTRPCRouter({
       if (exist) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "Username or Email has already been used.",
+          message: "Username, Email, atau NISN telah digunakan.",
         });
       }
 

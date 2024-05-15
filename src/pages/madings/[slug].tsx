@@ -19,14 +19,11 @@ import { api } from "~/utils/api";
 const ArticlePage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = (props) => {
+  const router = useRouter();
   const { slug } = props;
 
-  const router = useRouter();
-
-  console.log(slug);
-
   const { data } = api.mading.getSingleMading.useQuery(
-    { slug: slug },
+    { slug },
     {
       refetchOnWindowFocus: false,
     },
@@ -101,7 +98,7 @@ const ArticlePage: NextPage<
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-8">
               <Link
-                href={`/users/${data?.authorId}`}
+                href={`/u/${data?.author?.username}`}
                 className="group flex items-center gap-1"
               >
                 <ProfileImage src={data?.author?.profileImage} />
@@ -127,7 +124,7 @@ const ArticlePage: NextPage<
           <div className="relative mt-4 overflow-hidden">
             <Image
               src={data?.thumbnail}
-              alt=""
+              alt={`${data?.title}'s Image`}
               width={1200}
               height={620}
               className="max-h-[566px] w-full border border-mono-black object-contain"
@@ -197,10 +194,11 @@ export const getServerSideProps = async (
   const { req, res } = ctx;
 
   const ssg = await generateSSGHelper({ req, res });
-  const slug = ctx.params?.slug!;
+  // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
+  const slug = ctx.params?.slug as string;
 
   await ssg.mading.getSingleMading.prefetch({
-    id: slug,
+    slug,
   });
 
   return {

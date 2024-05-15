@@ -33,7 +33,10 @@ const CreateMadingForm = () => {
     createMutation.mutate({ ...data });
   };
 
-  const getCategory = api.category.getAllCategory.useQuery();
+  const getCategory = api.category.getAllCategory.useQuery(
+    {},
+    { refetchOnWindowFocus: false },
+  );
 
   const { startUpload, isUploading } = useUploadThing("madingThumbnail");
 

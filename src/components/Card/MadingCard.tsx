@@ -68,7 +68,7 @@ const MadingCard = ({ mading }: MadingCardProps) => {
       <section className="p-4">
         <header className="mb-2 flex items-center justify-between">
           <Link
-            href={`/users/${mading.author.id}`}
+            href={`/u/${mading.author.username}`}
             className="group flex items-center gap-1"
           >
             <ProfileImage src={null} />
