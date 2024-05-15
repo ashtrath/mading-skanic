@@ -111,13 +111,13 @@ export const madingRouter = createTRPCRouter({
   getSingleMading: publicProcedure
     .input(
       z.object({
-        id: z.string(),
+        slug: z.string(),
       }),
     )
     .query(async ({ ctx, input }) => {
       const madings = await ctx.db.madings.findFirst({
         where: {
-          id: input.id,
+          slug: input.slug,
         },
         include: {
           author: true,

@@ -20,7 +20,7 @@ const ListMading = () => {
 
   if (dataToShow == null || dataToShow.length === 0) {
     return (
-      <h2 className="my-4 text-center font-mono text-2xl text-mono-black">
+      <h2 className="my-4 text-center font-mono text-xl font-bold text-mono-black/75">
         Tidak ada mading tersedia.
       </h2>
     );

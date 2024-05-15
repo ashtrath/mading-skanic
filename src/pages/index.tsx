@@ -25,6 +25,7 @@ const Home: NextPage = () => {
   );
 
   const importantMadingToShow = getImportantMading?.madings;
+  console.log(importantMadingToShow);
 
   return (
     <>
@@ -92,11 +93,17 @@ const Home: NextPage = () => {
             </Link>
           </header>
 
-          <article className="flex flex-wrap justify-between gap-y-8">
-            {importantMadingToShow?.map((mading) => (
-              <MadingCard key={mading.id} mading={mading} />
-            ))}
-          </article>
+          {importantMadingToShow && importantMadingToShow.length > 0 ? (
+            <article className="grid grid-cols-1 justify-items-center gap-5 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
+              {importantMadingToShow?.map((mading) => (
+                <MadingCard key={mading.id} mading={mading} />
+              ))}
+            </article>
+          ) : (
+            <p className="text-center font-mono text-lg font-bold text-mono-black/75">
+              Tidak ada Mading Tersedia
+            </p>
+          )}
         </section>
         <section id="madingTerbaru" className="px-20 py-16">
           <header className="mb-6 flex items-center justify-between">
@@ -126,11 +133,17 @@ const Home: NextPage = () => {
               />
             </Link>
           </header>
-          <article className="flex flex-wrap justify-between gap-y-8">
-            {normalMadingToShow?.map((mading) => (
-              <MadingCard key={mading.id} mading={mading} />
-            ))}
-          </article>
+          {normalMadingToShow && normalMadingToShow.length > 0 ? (
+            <article className="grid grid-cols-1 justify-items-center gap-5 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
+              {normalMadingToShow?.map((mading) => (
+                <MadingCard key={mading.id} mading={mading} />
+              ))}
+            </article>
+          ) : (
+            <p className="text-center font-mono text-lg font-bold text-mono-black/75">
+              Tidak ada Mading Tersedia
+            </p>
+          )}
         </section>
       </main>
       <Footer />

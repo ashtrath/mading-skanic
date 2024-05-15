@@ -45,7 +45,7 @@ const MadingCard = ({ mading }: MadingCardProps) => {
         className="relative overflow-hidden"
       >
         {mading.priority === "Important" && (
-          <div className="absolute left-2 top-full z-10 flex w-fit items-center gap-1 rounded-full bg-mono-black px-4 py-1 text-mono-white">
+          <div className="absolute left-2 top-2 z-10 flex w-fit items-center gap-1 rounded-full bg-mono-black px-4 py-1 text-mono-white">
             <MaterialSymbol
               icon="notifications_active"
               fill={false}
@@ -62,7 +62,7 @@ const MadingCard = ({ mading }: MadingCardProps) => {
           width={343}
           height={343}
           alt={`${mading?.title}'s Image`}
-          className="max-h-[200px] w-full border-b border-b-mono-black object-contain"
+          className="h-[220px] w-full border-b border-b-mono-black object-contain"
         />
       </Link>
       <section className="p-4">
@@ -81,7 +81,12 @@ const MadingCard = ({ mading }: MadingCardProps) => {
           </p>
         </header>
         <section className="flex flex-col gap-1 text-mono-black">
-          <Link href={`/madings/${mading?.slug}`}>
+          <Link
+            href={{
+              pathname: `/madings/${mading.id}`,
+            }}
+            as={`/madings/${mading.slug}`}
+          >
             <h3 className="line-clamp-2 font-mono text-lg font-bold hover:underline">
               {mading.title}
             </h3>
@@ -91,7 +96,7 @@ const MadingCard = ({ mading }: MadingCardProps) => {
           </p>
         </section>
         <footer className="mt-4 flex items-center justify-between text-sm text-mono-black">
-          <div className="flex items-center gap-1">
+          <span className="flex items-center gap-1">
             <MaterialSymbol
               icon="schedule"
               fill={false}
@@ -100,9 +105,9 @@ const MadingCard = ({ mading }: MadingCardProps) => {
               size={24}
             />
             {formatTimeAgo(mading.createdAt)}
-          </div>
+          </span>
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1">
+            <span className="flex items-center gap-1">
               0
               <MaterialSymbol
                 icon="bookmark"
@@ -111,8 +116,8 @@ const MadingCard = ({ mading }: MadingCardProps) => {
                 grade={0}
                 size={24}
               />
-            </div>
-            <div className="flex items-center gap-1">
+            </span>
+            <span className="flex items-center gap-1">
               0
               <MaterialSymbol
                 icon="comment"
@@ -121,7 +126,7 @@ const MadingCard = ({ mading }: MadingCardProps) => {
                 grade={0}
                 size={24}
               />
-            </div>
+            </span>
           </div>
         </footer>
       </section>

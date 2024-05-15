@@ -57,7 +57,8 @@ const NavBar = ({ isLandingPage }: NavBarProps) => {
                       Profile
                     </Link>
                   </DropdownItem>
-                  {session.user.role !== "Siswa" && (
+                  {(session.user.role === "Penulis" ||
+                    session.user.role === "Admin") && (
                     <DropdownItem>
                       <Link
                         href={`/dashboard`}
