@@ -42,7 +42,7 @@ const MadingCard = ({ mading }: MadingCardProps) => {
           pathname: `/madings/${mading.id}`,
         }}
         as={`/madings/${mading.slug}`}
-        className="relative overflow-hidden"
+        className="relative overflow-hidden block"
       >
         {mading.priority === "Important" && (
           <div className="absolute left-2 top-2 z-10 flex w-fit items-center gap-1 rounded-full bg-mono-black px-4 py-1 text-mono-white">
