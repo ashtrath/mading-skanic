@@ -35,7 +35,7 @@ const ArticlePage: NextPage<
   return (
     <>
       <NavBar />
-      <main className="mx-20 my-8 min-h-screen overflow-x-hidden">
+      <main className="mx-20 my-8 min-h-screen">
         <div className="flex items-center justify-between">
           <Button
             intent="secondary"
@@ -136,8 +136,8 @@ const ArticlePage: NextPage<
         </section>
 
         {data?.article && (
-          <section className="mt-8 flex w-full items-center justify-between">
-            <aside className="flex w-fit max-w-[430px] flex-col gap-4 self-start border border-mono-black bg-mono-white px-8 py-4">
+          <section className="relative mt-8 flex h-fit w-full items-center justify-between">
+            <aside className="sticky top-28 flex w-fit max-w-[430px] flex-col gap-4 self-start border border-mono-black bg-mono-white px-8 py-4">
               <div className="space-y-1">
                 <h2 className="line-clamp-2 font-mono text-lg font-semibold text-mono-black">
                   {data.title}
@@ -157,9 +157,7 @@ const ArticlePage: NextPage<
                   <h3 className="font-mono font-bold text-mono-black">
                     Publikasi:
                   </h3>
-                  <p className="text-mono-black">
-                    {data.createdAt}
-                  </p>
+                  <p className="text-mono-black">{data.createdAt}</p>
                 </li>
                 {data.updatedAt && (
                   <li className="flex items-center justify-between">
@@ -171,18 +169,6 @@ const ArticlePage: NextPage<
                     </p>
                   </li>
                 )}
-                <li className="flex items-center justify-between">
-                  <h3 className="font-mono font-bold text-mono-black">
-                    Kategori:
-                  </h3>
-                  <p className="text-mono-black">{data.category?.name}</p>
-                </li>
-                <li className="flex items-center justify-between">
-                  <h3 className="font-mono font-bold text-mono-black">
-                    Kategori:
-                  </h3>
-                  <p className="text-mono-black">{data.category?.name}</p>
-                </li>
                 <li className="flex items-center justify-between">
                   <h3 className="font-mono font-bold text-mono-black">
                     Kategori:
@@ -211,7 +197,7 @@ export const getServerSideProps = async (
   const { req, res } = ctx;
 
   const ssg = await generateSSGHelper({ req, res });
-  const slug = ctx.params?.slug as string;
+  const slug = ctx.params?.slug!;
 
   await ssg.mading.getSingleMading.prefetch({
     id: slug,
