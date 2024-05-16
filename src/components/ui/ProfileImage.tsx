@@ -4,12 +4,19 @@ import { MaterialSymbol } from "react-material-symbols";
 type ProfileImageProps = {
   src?: string | null;
   className?: string;
+  size?: string;
+  placeholderSize?: number;
 };
 
-const ProfileImage = ({ src, className = "" }: ProfileImageProps) => {
+const ProfileImage = ({
+  src,
+  className = "",
+  size = "size-6",
+  placeholderSize = 24,
+}: ProfileImageProps) => {
   return (
     <div
-      className={`relative size-6 overflow-hidden rounded-full text-mono-black ${className}`}
+      className={`relative overflow-hidden rounded-full text-mono-black ${size} ${className}`}
     >
       {src == null ? (
         <MaterialSymbol
@@ -17,7 +24,7 @@ const ProfileImage = ({ src, className = "" }: ProfileImageProps) => {
           fill={false}
           weight={200}
           grade={0}
-          size={24}
+          size={placeholderSize}
         />
       ) : (
         <Image src={src} alt="Profile Image" quality={100} fill />
