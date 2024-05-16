@@ -3,10 +3,14 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { api } from "~/utils/api";
 import MadingCard from "../Card/MadingCard";
 
-const ListMading = () => {
+type ListMadingProps = {
+  onlyBookmarked?: boolean;
+};
+
+const ListMading = ({ onlyBookmarked = false }: ListMadingProps) => {
   const { data, fetchNextPage, hasNextPage } =
     api.mading.getAllMading.useInfiniteQuery(
-      { limit: 9 },
+      { limit: 9, onlyBookmarked },
       {
         refetchOnWindowFocus: false,
         getNextPageParam: (lastPage) => lastPage.nextCursor,

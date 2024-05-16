@@ -17,7 +17,7 @@ const BookmarksPage: NextPage = () => {
       <NavBar />
       <main className="my-16 flex min-h-screen flex-col gap-16 overflow-x-hidden px-20">
         <Heading title="Bookmark" />
-        <ListMading />
+        <ListMading onlyBookmarked={true} />
       </main>
       <Footer />
     </>

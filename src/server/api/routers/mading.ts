@@ -65,15 +65,16 @@ export const madingRouter = createTRPCRouter({
         limit: z.number(),
         cursor: z.string().nullish(),
         skip: z.number().optional(),
-        authorId: z.string().optional(),
-        categoryId: z.string().optional(),
         priority: z.nativeEnum(Priorities).optional(),
         filter: z.string().optional(),
-        query: z.string().optional(),
+        onlyBookmarked: z.boolean().optional(),
+        authorId: z.string().optional(),
+        categoryId: z.string().optional(),
       }),
     )
     .query(async ({ input, ctx }) => {
       const { limit, skip, cursor, filter } = input;
+      const currentUserId = ctx.session?.user.id;
 
       const madings = await ctx.db.madings.findMany({
         take: limit + 1,
@@ -90,23 +91,20 @@ export const madingRouter = createTRPCRouter({
           author: true,
           category: true,
         },
-        ...(input.priority && {
-          where: {
+        where: {
+          ...(input.priority && {
             priority: input.priority,
-          },
-        }),
-        ...(input.authorId && {
-          where: {
+          }),
+          ...(input.authorId && {
             authorId: input.authorId,
-          },
-        }),
-        ...(input.categoryId && {
-          where: {
-            category: {
-              id: input.categoryId,
-            },
-          },
-        }),
+          }),
+          ...(input.categoryId && {
+            categoryId: input.categoryId,
+          }),
+          ...(input.onlyBookmarked && {
+            bookmarks: { some: { userId: currentUserId } },
+          }),
+        },
       });
 
       let nextCursor: typeof cursor | undefined = undefined;
