@@ -1,6 +1,5 @@
 import { MaterialSymbol } from "react-material-symbols";
 import Input from "../Input/Input";
-import { Dropdown, DropdownItem } from "../ui/Dropdown";
 
 type HeadingProps = {
   title: string;
@@ -25,15 +24,12 @@ const Heading = ({ title }: HeadingProps) => {
           type="text"
           name="search"
           value=""
-          onChange={() => {"as"}}
+          onChange={() => {
+            "as";
+          }}
           placeholder="Search..."
           className="max-w-[200px]"
         />
-        <Dropdown title="Sort by" className="bg-mono-white !text-mono-black border border-mono-black">
-          <DropdownItem>Sort 1</DropdownItem>
-          <DropdownItem>Sort 2</DropdownItem>
-          <DropdownItem>Sort 3</DropdownItem>
-        </Dropdown>
       </div>
     </header>
   );
