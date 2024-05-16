@@ -19,7 +19,7 @@ const NavLink = ({
   className = "",
 }: NavLinkProps) => {
   const router = useRouter();
-  const isActive = router.pathname === href;
+  const isActive = router.asPath === href;
 
   return (
     <Link
