@@ -5,7 +5,7 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import slugify from "slugify";
 import { z } from "zod";
 
-import { formatTimeAgo, getFilterByInput } from "~/utils";
+import { getFilterByInput } from "~/utils";
 import { slugSettings } from "~/utils/constant";
 import { madingSchema } from "~/utils/validation/mading";
 
@@ -13,7 +13,8 @@ export const madingRouter = createTRPCRouter({
   createMading: protectedProcedure
     .input(madingSchema)
     .mutation(async ({ ctx, input }) => {
-      const { title, description, thumbnail, categoryId, priority, article } = input;
+      const { title, description, thumbnail, categoryId, priority, article } =
+        input;
       const slug = slugify(title, slugSettings);
 
       const exist = await ctx.db.madings.findFirst({
@@ -120,14 +121,14 @@ export const madingRouter = createTRPCRouter({
       };
     }),
 
-  getSingleMading: publicProcedure
+  getMadingBySlug: publicProcedure
     .input(
       z.object({
         slug: z.string(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const madings = await ctx.db.madings.findFirst({
+      const mading = await ctx.db.madings.findFirst({
         where: {
           slug: input.slug,
         },
@@ -137,11 +138,63 @@ export const madingRouter = createTRPCRouter({
         },
       });
 
-      const formattedDate = formatTimeAgo(madings!.createdAt, { smart: true });
+      if (!mading) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Mading not found" });
+      }
+
+      const bookmark = ctx.session?.user?.id
+        ? await ctx.db.bookmarks.findUnique({
+            where: {
+              userId_madingId: {
+                userId: ctx.session.user.id,
+                madingId: mading.id,
+              },
+            },
+          })
+        : null;
 
       return {
-        ...madings,
-        createdAt: formattedDate,
+        ...mading,
+        bookmarkedByMe: !!bookmark,
       };
+    }),
+
+  toggleBookmark: protectedProcedure
+    .input(
+      z.object({
+        madingId: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input: { madingId } }) => {
+      if (!madingId) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Mading not found" });
+      }
+
+      const data = {
+        madingId,
+        userId: ctx.session.user.id,
+      };
+
+      try {
+        const exist = await ctx.db.bookmarks.findUnique({
+          where: {
+            userId_madingId: data,
+          },
+        });
+
+        if (exist == null) {
+          await ctx.db.bookmarks.create({ data });
+          return { addedToBookmark: true };
+        } else {
+          await ctx.db.bookmarks.delete({ where: { userId_madingId: data } });
+          return { addedToBookmark: false };
+        }
+      } catch (err) {
+        console.error("Error toggling bookmark:", err);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Unable to toggle bookmark",
+        });
+      }
     }),
 });
