@@ -7,14 +7,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { MaterialSymbol } from "react-material-symbols";
-
-import Footer from "~/components/Layout/Footer";
-import NavBar from "~/components/Layout/NavBar";
-import Button from "~/components/ui/Button";
-import ProfileImage from "~/components/ui/ProfileImage";
 import { generateSSGHelper } from "~/server/api/ssgHelper";
 import { formatTimeAgo } from "~/utils";
 import { api } from "~/utils/api";
+
+import { useEffect, useState } from "react";
+import Footer from "~/components/Layout/Footer";
+import NavBar from "~/components/Layout/NavBar";
+import BookmarkButton from "~/components/ListMading/BookmarkButton";
+import Button from "~/components/ui/Button";
+import ProfileImage from "~/components/ui/ProfileImage";
+import CommentButton from "~/components/ListMading/CommentButton";
 
 const ArticlePage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
@@ -22,12 +25,33 @@ const ArticlePage: NextPage<
   const router = useRouter();
   const { slug } = props;
 
-  const { data } = api.mading.getSingleMading.useQuery(
+  const { data: mading, refetch } = api.mading.getMadingBySlug.useQuery(
     { slug },
     {
       refetchOnWindowFocus: false,
     },
   );
+
+  const [bookmarkedByMe, setBookmarkedByMe] = useState(false);
+  const toggleBookmark = api.mading.toggleBookmark.useMutation({
+    onSuccess: async () => {
+      await refetch();
+    },
+  });
+
+  useEffect(() => {
+    if (mading) {
+      setBookmarkedByMe(mading.bookmarkedByMe);
+    }
+  }, [mading]);
+
+  const handleBookmark = async () => {
+    try {
+      await toggleBookmark.mutateAsync({ madingId: mading?.id });
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+    }
+  };
 
   return (
     <>
@@ -50,30 +74,17 @@ const ArticlePage: NextPage<
             <span className="group-hover:underline">Kembali</span>
           </Button>
           <div className="flex items-center gap-4 text-mono-black">
-            <button>
-              <MaterialSymbol
-                icon="comment"
-                fill={false}
-                weight={200}
-                grade={0}
-                size={32}
-              />
-            </button>
-            <button>
-              <MaterialSymbol
-                icon="bookmark"
-                fill={false}
-                weight={200}
-                grade={0}
-                size={32}
-              />
-            </button>
+            <CommentButton />
+            <BookmarkButton
+              onClick={handleBookmark}
+              bookmarkedByMe={bookmarkedByMe}
+            />
           </div>
         </div>
 
         <header className="mb-[70px] mt-8 flex items-center justify-between">
           <div className="max-w-[520px]">
-            {data?.priority === "Important" && (
+            {mading?.priority === "Important" && (
               <div className="mb-2 flex w-fit items-center gap-1 rounded-full bg-mono-black px-4 py-1 text-mono-white">
                 <MaterialSymbol
                   icon="notifications_active"
@@ -86,11 +97,11 @@ const ArticlePage: NextPage<
               </div>
             )}
             <h1 className="font-mono text-xl font-bold text-mono-black">
-              {data?.title}
+              {mading?.title}
             </h1>
           </div>
           <p className="max-w-[540px] text-justify text-mono-black">
-            {data?.description}
+            {mading?.description}
           </p>
         </header>
 
@@ -98,12 +109,12 @@ const ArticlePage: NextPage<
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-8">
               <Link
-                href={`/u/${data?.author?.username}`}
+                href={`/u/${mading?.author?.username}`}
                 className="group flex items-center gap-1"
               >
-                <ProfileImage src={data?.author?.profileImage} />
+                <ProfileImage src={mading?.author?.profileImage} />
                 <span className="font-mono text-sm text-mono-black underline-offset-4 group-hover:underline">
-                  @{data?.author?.username}
+                  @{mading?.author?.username}
                 </span>
               </Link>
               <span className="flex items-center gap-1 font-mono text-sm text-mono-black">
@@ -114,17 +125,17 @@ const ArticlePage: NextPage<
                   grade={0}
                   size={24}
                 />
-                {data?.createdAt}
+                {formatTimeAgo(mading?.createdAt, { smart: true })}
               </span>
             </div>
             <p className="w-fit rounded-full border border-mono-black bg-mono-white px-4 py-1 font-mono text-xs font-medium uppercase text-mono-black">
-              {data?.category?.name}
+              {mading?.category?.name}
             </p>
           </div>
           <div className="relative mt-4 overflow-hidden">
             <Image
-              src={data?.thumbnail}
-              alt={`${data?.title}'s Image`}
+              src={mading?.thumbnail}
+              alt={`${mading?.title}'s Image`}
               width={1200}
               height={620}
               className="max-h-[566px] w-full border border-mono-black object-contain"
@@ -132,20 +143,20 @@ const ArticlePage: NextPage<
           </div>
         </section>
 
-        {data?.article && (
+        {mading?.article && (
           <section className="relative mt-8 flex h-fit w-full items-center justify-between">
             <aside className="sticky top-28 flex w-fit max-w-[430px] flex-col gap-4 self-start border border-mono-black bg-mono-white px-8 py-4">
               <div className="space-y-1">
                 <h2 className="line-clamp-2 font-mono text-lg font-semibold text-mono-black">
-                  {data.title}
+                  {mading.title}
                 </h2>
                 <Link
-                  href={`/users/${data.authorId}`}
+                  href={`/users/${mading.authorId}`}
                   className="group flex items-center gap-1"
                 >
-                  <ProfileImage src={data.author?.profileImage} />
+                  <ProfileImage src={mading.author?.profileImage} />
                   <span className="font-mono text-sm text-mono-black underline-offset-4 group-hover:underline">
-                    @{data.author?.username}
+                    @{mading.author?.username}
                   </span>
                 </Link>
               </div>
@@ -154,15 +165,17 @@ const ArticlePage: NextPage<
                   <h3 className="font-mono font-bold text-mono-black">
                     Publikasi:
                   </h3>
-                  <p className="text-mono-black">{data.createdAt}</p>
+                  <p className="text-mono-black">
+                    {formatTimeAgo(mading.createdAt, { smart: true })}
+                  </p>
                 </li>
-                {data.updatedAt && (
+                {mading.updatedAt && (
                   <li className="flex items-center justify-between">
                     <h3 className="font-mono font-bold text-mono-black">
                       Terakhir di Edit:
                     </h3>
                     <p className="text-mono-black">
-                      {formatTimeAgo(data.publishedAt, { smart: true })}
+                      {formatTimeAgo(mading.publishedAt, { smart: true })}
                     </p>
                   </li>
                 )}
@@ -170,13 +183,13 @@ const ArticlePage: NextPage<
                   <h3 className="font-mono font-bold text-mono-black">
                     Kategori:
                   </h3>
-                  <p className="text-mono-black">{data.category?.name}</p>
+                  <p className="text-mono-black">{mading.category?.name}</p>
                 </li>
               </ul>
             </aside>
             <article
               className="prose"
-              dangerouslySetInnerHTML={{ __html: data.article }}
+              dangerouslySetInnerHTML={{ __html: mading.article }}
             ></article>
           </section>
         )}
@@ -197,7 +210,7 @@ export const getServerSideProps = async (
   // eslint-disable-next-line @typescript-eslint/non-nullable-type-assertion-style
   const slug = ctx.params?.slug as string;
 
-  await ssg.mading.getSingleMading.prefetch({
+  await ssg.mading.getMadingBySlug.prefetch({
     slug,
   });
 
