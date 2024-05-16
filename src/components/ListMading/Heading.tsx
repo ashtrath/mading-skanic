@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { MaterialSymbol } from "react-material-symbols";
 import Input from "../Input/Input";
 
@@ -6,6 +7,8 @@ type HeadingProps = {
 };
 
 const Heading = ({ title }: HeadingProps) => {
+  const [search, setSearch] = useState(``);
+
   return (
     <header className="flex items-center justify-between">
       <h2 className="font-mono text-xl font-bold text-mono-black">{title}</h2>
@@ -20,7 +23,10 @@ const Heading = ({ title }: HeadingProps) => {
           />
           Filter
         </button>
-        <label htmlFor="search" className="flex items-center gap-2 border max-w-[200px] border-mono-black bg-mono-white p-2 focus-within:border-x-2">
+        <label
+          htmlFor="search"
+          className="flex max-w-[200px] items-center gap-2 border border-mono-black bg-mono-white p-2 focus-within:border-x-2"
+        >
           <MaterialSymbol
             icon="search"
             fill={false}
@@ -31,10 +37,7 @@ const Heading = ({ title }: HeadingProps) => {
           <Input
             type="text"
             name="search"
-            value=""
-            onChange={() => {
-              "as";
-            }}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Search..."
             className="!border-none !bg-transparent !p-0"
           />
