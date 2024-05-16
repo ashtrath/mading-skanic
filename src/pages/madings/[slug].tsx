@@ -11,7 +11,7 @@ import { generateSSGHelper } from "~/server/api/ssgHelper";
 import { formatTimeAgo } from "~/utils";
 import { api } from "~/utils/api";
 
-import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import Footer from "~/components/Layout/Footer";
 import NavBar from "~/components/Layout/NavBar";
 import BookmarkButton from "~/components/ListMading/BookmarkButton";
@@ -22,6 +22,7 @@ import ProfileImage from "~/components/ui/ProfileImage";
 const ArticlePage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = (props) => {
+  const session = useSession();
   const router = useRouter();
   const { slug } = props;
 
@@ -31,27 +32,6 @@ const ArticlePage: NextPage<
       refetchOnWindowFocus: false,
     },
   );
-
-  const [bookmarkedByMe, setBookmarkedByMe] = useState(false);
-  const toggleBookmark = api.mading.toggleBookmark.useMutation({
-    onSuccess: async () => {
-      await refetch();
-    },
-  });
-
-  useEffect(() => {
-    if (mading) {
-      setBookmarkedByMe(mading.bookmarkedByMe);
-    }
-  }, [mading]);
-
-  const handleBookmark = async () => {
-    try {
-      await toggleBookmark.mutateAsync({ madingId: mading?.id });
-    } catch (error) {
-      console.error("Error toggling bookmark:", error);
-    }
-  };
 
   return (
     <>
@@ -75,10 +55,12 @@ const ArticlePage: NextPage<
           </Button>
           <div className="flex items-center gap-4 text-mono-black">
             <CommentButton />
-            <BookmarkButton
-              onClick={handleBookmark}
-              bookmarkedByMe={bookmarkedByMe}
-            />
+            {session.status === "authenticated" && (
+              <BookmarkButton
+                madingId={mading?.id}
+                bookmarkedByMe={mading?.bookmarkedByMe}
+              />
+            )}
           </div>
         </div>
 

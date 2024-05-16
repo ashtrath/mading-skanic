@@ -1,8 +1,10 @@
 import { type $Enums } from "@prisma/client";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { MaterialSymbol } from "react-material-symbols";
 import { formatTimeAgo, truncateText } from "~/utils";
+import BookmarkButton from "../ListMading/BookmarkButton";
 import ProfileImage from "../ui/ProfileImage";
 
 type MadingCardProps = {
@@ -45,6 +47,8 @@ const MadingCard = ({
   author,
   bookmarkedByMe,
 }: MadingCardProps) => {
+  const session = useSession();
+
   return (
     <article className="w-fit max-w-[343px] border border-mono-black shadow-mono">
       <Link
@@ -86,17 +90,17 @@ const MadingCard = ({
               @{author.username}
             </span>
           </Link>
-          <div className="flex items-center gap-2">
-            <p className="w-fit rounded-full border border-mono-black bg-mono-white px-4 py-1 font-mono text-xs font-medium uppercase text-mono-black">
+          <div className="flex items-center gap-2 text-mono-black">
+            <p className="w-fit rounded-full border border-mono-black bg-mono-white px-4 py-1 font-mono text-xs font-medium uppercase">
               {category.name}
             </p>
-            <MaterialSymbol
-              icon="bookmark"
-              fill={bookmarkedByMe}
-              weight={200}
-              grade={0}
-              size={24}
-            />
+            {session.status === "authenticated" && (
+              <BookmarkButton
+                size={24}
+                madingId={id}
+                bookmarkedByMe={bookmarkedByMe}
+              />
+            )}
           </div>
         </header>
         <section className="flex flex-col gap-1 text-mono-black">
