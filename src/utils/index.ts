@@ -1,4 +1,4 @@
-import { format, formatDistanceToNow, formatDistanceToNowStrict, isToday } from "date-fns";
+import { format, formatDistanceToNowStrict, isToday } from "date-fns";
 import { useEffect, useRef } from "react";
 import slugify from "slugify";
 
@@ -12,7 +12,7 @@ export const formatTimeAgo = (date: Date, options?: Options) => {
   const dateToFormat = new Date(date);
 
   if (options?.smart === true)
-    return format(dateToFormat, isToday(dateToFormat) ? "HH:mm" : "dd/MM/yyyy");
+    return format(dateToFormat, isToday(dateToFormat) ? "HH:mm" : "dd MMMM yyyy, HH:mm");
 
   return formatDistanceToNowStrict(dateToFormat, {
     addSuffix: true,
