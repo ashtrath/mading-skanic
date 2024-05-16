@@ -62,7 +62,7 @@ export const madingRouter = createTRPCRouter({
   getAllMading: publicProcedure
     .input(
       z.object({
-        limit: z.number(),
+        limit: z.number().min(1).max(100).default(9),
         cursor: z.string().nullish(),
         skip: z.number().optional(),
         priority: z.nativeEnum(Priorities).optional(),
@@ -90,6 +90,11 @@ export const madingRouter = createTRPCRouter({
         include: {
           author: true,
           category: true,
+          bookmarks: {
+            where: {
+              userId: currentUserId,
+            },
+          },
         },
         where: {
           ...(input.priority && {
@@ -114,7 +119,10 @@ export const madingRouter = createTRPCRouter({
       }
 
       return {
-        madings,
+        mading: madings.map((mading) => ({
+          ...mading,
+          bookmarkedByMe: mading.bookmarks.length > 0,
+        })),
         nextCursor,
       };
     }),

@@ -18,7 +18,7 @@ const ListMading = ({ onlyBookmarked = false }: ListMadingProps) => {
     );
 
   const dataToShow = useMemo(
-    () => data?.pages.flatMap((page) => page.madings),
+    () => data?.pages.flatMap((page) => page.mading),
     [data],
   );
 
@@ -39,7 +39,7 @@ const ListMading = ({ onlyBookmarked = false }: ListMadingProps) => {
       className="grid grid-cols-1 justify-items-center gap-5 md:grid-cols-2 lg:grid-cols-3"
     >
       {dataToShow?.map((mading) => (
-        <MadingCard key={mading.id} mading={mading} />
+        <MadingCard key={mading.id} {...mading} />
       ))}
     </InfiniteScroll>
   );
