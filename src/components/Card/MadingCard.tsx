@@ -138,6 +138,16 @@ const MadingCard = ({
                 size={24}
               />
             </span>
+            <span className="flex items-center gap-1">
+              0
+              <MaterialSymbol
+                icon="favorite"
+                fill={false}
+                weight={200}
+                grade={0}
+                size={24}
+              />
+            </span>
           </div>
         </footer>
       </section>
