@@ -31,7 +31,7 @@ model Users {
     Bookmarks Bookmarks[]
     Likes     Likes[]
 
-    @@unique([id, username, email, nisn, createdAt])
+    @@unique([id, username, email, nisn])
 }
 
 model Madings {
@@ -56,7 +56,7 @@ model Madings {
     analytics Analytics?
     Likes     Likes[]
 
-    @@unique([id, title, slug, createdAt])
+    @@unique([id, title, slug])
     @@index([authorId])
     @@index([categoryId])
 }
@@ -79,7 +79,7 @@ model Likes {
     user   Users   @relation(fields: [userId], references: [id], onDelete: Cascade)
     mading Madings @relation(fields: [madingId], references: [id], onDelete: Cascade)
 
-    @@id([userId, madingId, createdAt])
+    @@id([userId, madingId])
     @@index([userId])
     @@index([madingId])
 }
@@ -92,7 +92,7 @@ model Bookmarks {
     user   Users   @relation(fields: [userId], references: [id], onDelete: Cascade)
     mading Madings @relation(fields: [madingId], references: [id], onDelete: Cascade)
 
-    @@id([userId, madingId, createdAt])
+    @@id([userId, madingId])
     @@index([userId])
     @@index([madingId])
 }
@@ -103,7 +103,7 @@ model Categories {
     createdAt DateTime  @default(now())
     Madings   Madings[]
 
-    @@unique([name, createdAt])
+    @@unique([name])
 }
 
 model Analytics {
