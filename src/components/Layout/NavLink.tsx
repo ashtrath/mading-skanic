@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { type ReactNode } from "react";
 import { MaterialSymbol, type SymbolCodepoints } from "react-material-symbols";
 
@@ -17,6 +18,9 @@ const NavLink = ({
   gray,
   className = "",
 }: NavLinkProps) => {
+  const router = useRouter();
+  const isActive = router.pathname === href;
+
   return (
     <Link
       href={href}
@@ -24,12 +28,14 @@ const NavLink = ({
     >
       <MaterialSymbol
         icon={icon}
-        fill={false}
+        fill={isActive}
         weight={200}
         grade={0}
         size={24}
       />
-      <span className="font-mono no-underline underline-offset-4 group-hover:underline">
+      <span
+        className={`font-mono underline-offset-4 group-hover:underline ${isActive ? "underline" : "no-underline"}`}
+      >
         {children}
       </span>
     </Link>
