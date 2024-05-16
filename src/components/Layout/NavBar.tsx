@@ -9,7 +9,7 @@ type NavBarProps = {
 };
 
 const NavBar = ({ isLandingPage }: NavBarProps) => {
-  const { data: session } = useSession();
+  const session = useSession();
 
   return (
     <nav
@@ -33,7 +33,7 @@ const NavBar = ({ isLandingPage }: NavBarProps) => {
               Mading
             </NavLink>
           </li>
-          {session ? (
+          {session.status === "authenticated" ? (
             <>
               <li className="mr-2">
                 <NavLink href={"/bookmarks"} icon="bookmark">
@@ -41,10 +41,10 @@ const NavBar = ({ isLandingPage }: NavBarProps) => {
                 </NavLink>
               </li>
               <li>
-                <Dropdown title={session.user.name}>
+                <Dropdown title={session.data.user.name}>
                   <DropdownItem>
                     <Link
-                      href={`/u/${session.user.name}`}
+                      href={`/u/${session.data.user.name}`}
                       className="flex items-center gap-1 font-mono"
                     >
                       <MaterialSymbol
@@ -57,8 +57,8 @@ const NavBar = ({ isLandingPage }: NavBarProps) => {
                       Profile
                     </Link>
                   </DropdownItem>
-                  {(session.user.role === "Penulis" ||
-                    session.user.role === "Admin") && (
+                  {(session.data.user.role === "Penulis" ||
+                    session.data.user.role === "Admin") && (
                     <DropdownItem>
                       <Link
                         href={`/dashboard`}
