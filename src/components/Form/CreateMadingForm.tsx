@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 
-import { DevTool } from "@hookform/devtools";
 import { MaterialSymbol } from "react-material-symbols";
 import { imageToBlobHandler } from "~/utils";
 import { api } from "~/utils/api";
@@ -163,7 +162,6 @@ const CreateMadingForm = () => {
           />
         </Button>
       </form>
-      <DevTool control={control} />
     </div>
   );
 };
