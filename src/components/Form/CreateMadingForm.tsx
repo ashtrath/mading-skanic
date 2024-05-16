@@ -51,7 +51,7 @@ const CreateMadingForm = () => {
         <Controller
           control={control}
           name="title"
-          rules={{ required: true, minLength: 5, maxLength: 100 }}
+          rules={{ required: true, minLength: 5, maxLength: 191 }}
           render={({ field }) => <Input label="Judul" type="text" {...field} />}
         />
         {errors.title && <span>This field is required</span>}

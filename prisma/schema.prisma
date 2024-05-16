@@ -37,7 +37,7 @@ model Users {
 model Madings {
     id          String     @id @default(cuid())
     authorId    String
-    title       String     @db.VarChar(100)
+    title       String
     slug        String     @db.VarChar(255)
     description String     @db.Text
     thumbnail   String?    @db.VarChar(255)

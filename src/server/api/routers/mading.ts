@@ -13,23 +13,35 @@ export const madingRouter = createTRPCRouter({
   createMading: protectedProcedure
     .input(madingSchema)
     .mutation(async ({ ctx, input }) => {
-      const slug = slugify(input.title, slugSettings);
+      const { title, description, thumbnail, categoryId, priority, article } = input;
+      const slug = slugify(title, slugSettings);
 
-      const priority = input.priority
-        ? Priorities.Important
-        : Priorities.Normal;
+      const exist = await ctx.db.madings.findFirst({
+        where: {
+          OR: [{ title }, { slug }],
+        },
+      });
+
+      if (exist) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "Terdapat mading dengan judul yang serupa.",
+        });
+      }
+
+      const enumPriority = priority ? Priorities.Important : Priorities.Normal;
 
       const transactionResult = await ctx.db.$transaction(async () => {
         const newMading = await ctx.db.madings.create({
           data: {
             authorId: ctx.session.user.id,
-            title: input.title,
+            title: title,
             slug: slug,
-            description: input.description,
-            thumbnail: input.thumbnail,
-            article: input.article,
-            priority: priority,
-            categoryId: input.categoryId,
+            description: description,
+            thumbnail: thumbnail,
+            article: article,
+            priority: enumPriority,
+            categoryId: categoryId,
           },
         });
 
