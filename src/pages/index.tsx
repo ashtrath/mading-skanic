@@ -17,15 +17,14 @@ const Home: NextPage = () => {
     { refetchOnWindowFocus: false },
   );
 
-  const normalMadingToShow = getAllMading?.madings;
+  const normalMadingToShow = getAllMading?.mading;
 
   const { data: getImportantMading } = api.mading.getAllMading.useQuery(
     { limit: 3, priority: "Important" },
     { refetchOnWindowFocus: false },
   );
 
-  const importantMadingToShow = getImportantMading?.madings;
-  console.log(importantMadingToShow);
+  const importantMadingToShow = getImportantMading?.mading;
 
   return (
     <>
@@ -96,7 +95,7 @@ const Home: NextPage = () => {
           {importantMadingToShow && importantMadingToShow.length > 0 ? (
             <article className="grid grid-cols-1 justify-items-center gap-5 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
               {importantMadingToShow?.map((mading) => (
-                <MadingCard key={mading.id} mading={mading} />
+                <MadingCard key={mading.id} {...mading} />
               ))}
             </article>
           ) : (
@@ -136,7 +135,7 @@ const Home: NextPage = () => {
           {normalMadingToShow && normalMadingToShow.length > 0 ? (
             <article className="grid grid-cols-1 justify-items-center gap-5 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
               {normalMadingToShow?.map((mading) => (
-                <MadingCard key={mading.id} mading={mading} />
+                <MadingCard key={mading.id} {...mading} />
               ))}
             </article>
           ) : (
