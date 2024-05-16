@@ -15,9 +15,9 @@ import { useEffect, useState } from "react";
 import Footer from "~/components/Layout/Footer";
 import NavBar from "~/components/Layout/NavBar";
 import BookmarkButton from "~/components/ListMading/BookmarkButton";
+import CommentButton from "~/components/ListMading/CommentButton";
 import Button from "~/components/ui/Button";
 import ProfileImage from "~/components/ui/ProfileImage";
-import CommentButton from "~/components/ListMading/CommentButton";
 
 const ArticlePage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
@@ -175,7 +175,7 @@ const ArticlePage: NextPage<
                       Terakhir di Edit:
                     </h3>
                     <p className="text-mono-black">
-                      {formatTimeAgo(mading.publishedAt, { smart: true })}
+                      {formatTimeAgo(mading.updatedAt, { smart: true })}
                     </p>
                   </li>
                 )}
