@@ -20,16 +20,25 @@ const Heading = ({ title }: HeadingProps) => {
           />
           Filter
         </button>
-        <Input
-          type="text"
-          name="search"
-          value=""
-          onChange={() => {
-            "as";
-          }}
-          placeholder="Search..."
-          className="max-w-[200px]"
-        />
+        <label htmlFor="search" className="flex items-center gap-2 border max-w-[200px] border-mono-black bg-mono-white p-2 focus-within:border-x-2">
+          <MaterialSymbol
+            icon="search"
+            fill={false}
+            weight={200}
+            grade={0}
+            size={24}
+          />
+          <Input
+            type="text"
+            name="search"
+            value=""
+            onChange={() => {
+              "as";
+            }}
+            placeholder="Search..."
+            className="!border-none !bg-transparent !p-0"
+          />
+        </label>
       </div>
     </header>
   );
