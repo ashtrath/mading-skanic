@@ -2,20 +2,20 @@ import type { GetServerSideProps, NextPage } from "next";
 import { getServerAuthSession } from "~/server/auth";
 
 import { useSession } from "next-auth/react";
-import CreateMadingForm from "~/components/Form/CreateMadingForm";
-import Footer from "~/components/Layout/Footer";
+import AnalyticsCard from "~/components/Card/AnalyticsCard";
 import SideBySideLayout from "~/components/Layout/SideBySide";
 import MetaTags from "~/components/Meta/MetaTags";
+import { api } from "~/utils/api";
 
 const DashboardPage: NextPage = () => {
   const session = useSession();
-  const userRole = session.data?.user;
+  const user = session.data?.user;
 
   const items = [
     { href: "/dashboard", icon: "analytics", label: "Dashboard" },
     { href: "/dashboard/mading", icon: "article", label: "Mading" },
     {
-      href: "/dashboard/madings-request",
+      href: "/dashboard/madings/request",
       icon: "all_inbox",
       label: "Permintaan",
       roles: ["Admin"],
@@ -34,15 +34,37 @@ const DashboardPage: NextPage = () => {
     },
   ];
 
+  const { data: madingPublished } = api.mading.getAllMading.useQuery(
+    { limit: 9 },
+    { refetchOnWindowFocus: false },
+  );
+
   return (
     <>
       <MetaTags title="Dashboard" />
-      <SideBySideLayout user={userRole} items={items}>
+      <SideBySideLayout user={user} items={items}>
         <h1 className="font-mono text-lg font-semibold text-mono-black">
           Dashboard
         </h1>
+        <div className="flex items-center gap-8">
+          <AnalyticsCard
+            icon="article"
+            counter={madingPublished?.mading.length}
+            description="Mading yang diterbitkan"
+          />
+          <AnalyticsCard
+            icon="visibility"
+            counter={15}
+            description="Total views mading"
+            className="grow justify-center"
+          />
+          <AnalyticsCard
+            icon="thumb_up"
+            counter={115}
+            description="Total engagement mading"
+          />
+        </div>
       </SideBySideLayout>
-      <Footer />
     </>
   );
 };

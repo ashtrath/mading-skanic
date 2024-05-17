@@ -40,7 +40,7 @@ const CreateMadingForm = () => {
   const { startUpload, isUploading } = useUploadThing("madingThumbnail");
 
   return (
-    <div className="radius flex flex-col items-center gap-2 border p-4">
+    <div className="flex flex-col items-center gap-2 border p-4">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
         {error && (
           <p className="text-center text-red-600">

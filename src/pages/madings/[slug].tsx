@@ -26,7 +26,7 @@ const ArticlePage: NextPage<
   const router = useRouter();
   const { slug } = props;
 
-  const { data: mading, refetch } = api.mading.getMadingBySlug.useQuery(
+  const { data: mading } = api.mading.getMadingBySlug.useQuery(
     { slug },
     {
       refetchOnWindowFocus: false,

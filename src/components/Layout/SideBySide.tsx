@@ -18,9 +18,9 @@ interface LayoutProps {
 const SideBySideLayout: React.FC<LayoutProps> = ({ items, children, user }) => {
   return (
     <UserProvider user={user}>
-      <div className="flex min-h-screen gap-8 overflow-hidden px-20 py-16">
-        <Sidebar items={items} />
-        <main className="flex h-fit w-full flex-col gap-8 overflow-y-auto border border-mono-black px-8 py-4">
+      <div className="flex h-screen flex-1 gap-8 overflow-hidden">
+        <Sidebar items={items} className="py-16 ml-20" />
+        <main className="flex w-full flex-col gap-8 overflow-y-auto py-16 pr-20">
           {children}
         </main>
       </div>
