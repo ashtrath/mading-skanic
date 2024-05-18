@@ -27,7 +27,7 @@ const BookmarkButton = ({
     }
   };
   return (
-    <button onClick={handleBookmark}>
+    <button onClick={handleBookmark} className="grid">
       <MaterialSymbol
         icon="bookmark"
         fill={isBookmarked}
