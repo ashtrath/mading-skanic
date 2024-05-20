@@ -3,11 +3,12 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { MaterialSymbol } from "react-material-symbols";
+
 import { formatTimeAgo, truncateText } from "~/utils";
 import BookmarkButton from "../ListMading/BookmarkButton";
 import ProfileImage from "../ui/ProfileImage";
 
-type MadingCardProps = {
+export type MadingProps = {
   id: string;
   title: string;
   slug: string;
@@ -16,23 +17,47 @@ type MadingCardProps = {
   priority: $Enums.Priorities;
   createdAt: Date;
   category: {
-    id: string;
     name: string;
-    createdAt: Date;
   };
   author: {
-    id: string;
-    namaSiswa: string;
     username: string;
-    email: string;
-    password: string;
-    nisn: string;
     profileImage: string | null;
-    role: $Enums.Roles;
-    emailVerifiedAt: Date | null;
-    createdAt: Date;
   };
   bookmarkedByMe: boolean;
+};
+
+const PriorityBadge = ({ priority }: { priority: $Enums.Priorities }) => {
+  if (priority !== "Important") return null;
+
+  return (
+    <div className="absolute left-2 top-2 z-10 flex w-fit items-center gap-1 rounded-full bg-mono-black px-4 py-1 text-mono-white">
+      <MaterialSymbol
+        icon="notifications_active"
+        fill={false}
+        weight={200}
+        grade={0}
+        size={18}
+      />
+      <span className="text-xs uppercase">Penting</span>
+    </div>
+  );
+};
+
+const AuthorLink = ({
+  username,
+  profileImage,
+}: {
+  username: string;
+  profileImage: string | null;
+}) => {
+  return (
+    <Link href={`/u/${username}`} className="group flex items-center gap-1">
+      <ProfileImage src={profileImage} />
+      <span className="font-mono text-sm font-medium text-mono-black underline-offset-4 group-hover:underline">
+        @{username}
+      </span>
+    </Link>
+  );
 };
 
 const MadingCard = ({
@@ -46,7 +71,7 @@ const MadingCard = ({
   category,
   author,
   bookmarkedByMe,
-}: MadingCardProps) => {
+}: MadingProps) => {
   const session = useSession();
 
   return (
@@ -58,18 +83,7 @@ const MadingCard = ({
         as={`/madings/${slug}`}
         className="relative block overflow-hidden"
       >
-        {priority === "Important" && (
-          <div className="absolute left-2 top-2 z-10 flex w-fit items-center gap-1 rounded-full bg-mono-black px-4 py-1 text-mono-white">
-            <MaterialSymbol
-              icon="notifications_active"
-              fill={false}
-              weight={200}
-              grade={0}
-              size={18}
-            />
-            <span className="text-xs uppercase">Penting</span>
-          </div>
-        )}
+        <PriorityBadge priority={priority} />
         <Image
           loading="lazy"
           src={thumbnail!}
@@ -81,15 +95,10 @@ const MadingCard = ({
       </Link>
       <section className="p-4">
         <header className="mb-2 flex items-center justify-between">
-          <Link
-            href={`/u/${author.username}`}
-            className="group flex items-center gap-1"
-          >
-            <ProfileImage src={null} />
-            <span className="font-mono text-sm font-medium text-mono-black underline-offset-4 group-hover:underline">
-              @{author.username}
-            </span>
-          </Link>
+          <AuthorLink
+            username={author.username}
+            profileImage={author.profileImage}
+          />
           <div className="flex items-center gap-2 text-mono-black">
             <p className="w-fit rounded-full border border-mono-black bg-mono-white px-4 py-1 font-mono text-xs font-medium uppercase">
               {category.name}
