@@ -1,11 +1,13 @@
 import { type $Enums } from "@prisma/client";
 import { useSession } from "next-auth/react";
+import { type StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import Link from "next/link";
 import { MaterialSymbol } from "react-material-symbols";
 
 import { formatTimeAgo, truncateText } from "~/utils";
 import BookmarkButton from "../ListMading/BookmarkButton";
+import Badge from "../ui/Badge";
 import ProfileImage from "../ui/ProfileImage";
 
 export type MadingProps = {
@@ -13,7 +15,7 @@ export type MadingProps = {
   title: string;
   slug: string;
   description: string;
-  thumbnail: string | null;
+  thumbnail: string | StaticImport;
   priority: $Enums.Priorities;
   createdAt: Date;
   category: {
@@ -24,23 +26,6 @@ export type MadingProps = {
     profileImage: string | null;
   };
   bookmarkedByMe: boolean;
-};
-
-const PriorityBadge = ({ priority }: { priority: $Enums.Priorities }) => {
-  if (priority !== "Important") return null;
-
-  return (
-    <div className="absolute left-2 top-2 z-10 flex w-fit items-center gap-1 rounded-full bg-mono-black px-4 py-1 text-mono-white">
-      <MaterialSymbol
-        icon="notifications_active"
-        fill={false}
-        weight={200}
-        grade={0}
-        size={18}
-      />
-      <span className="text-xs uppercase">Penting</span>
-    </div>
-  );
 };
 
 const AuthorLink = ({
@@ -77,16 +62,19 @@ const MadingCard = ({
   return (
     <article className="w-fit max-w-[343px] border border-mono-black shadow-mono">
       <Link
-        href={{
-          pathname: `/madings/${id}`,
-        }}
-        as={`/madings/${slug}`}
+        href={`/madings/${slug}`}
         className="relative block overflow-hidden"
       >
-        <PriorityBadge priority={priority} />
+        {priority === "Important" && (
+          <Badge
+            icon="notifications_active"
+            text="Penting"
+            className="absolute left-2 top-2"
+          />
+        )}
         <Image
           loading="lazy"
-          src={thumbnail!}
+          src={thumbnail}
           width={343}
           height={343}
           alt={`${title}'s Image`}
@@ -113,12 +101,7 @@ const MadingCard = ({
           </div>
         </header>
         <section className="flex flex-col gap-1 text-mono-black">
-          <Link
-            href={{
-              pathname: `/madings/${id}`,
-            }}
-            as={`/madings/${slug}`}
-          >
+          <Link href={`/madings/${slug}`}>
             <h3 className="line-clamp-2 font-mono text-lg font-bold hover:underline">
               {title}
             </h3>
