@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { MaterialSymbol } from "react-material-symbols";
 import { api } from "~/utils/api";
 
@@ -11,7 +11,7 @@ type BookmarkButtonProps = {
 const BookmarkButton = ({
   size = 32,
   madingId,
-  bookmarkedByMe,
+  bookmarkedByMe = false,
 }: BookmarkButtonProps) => {
   const [isBookmarked, setIsBookmarked] = useState(bookmarkedByMe);
   const { mutate: toggleBookmark, isPending } =
@@ -21,11 +21,16 @@ const BookmarkButton = ({
       },
     });
 
-  const handleBookmark = () => {
-    if (!isPending) {
+  useEffect(() => {
+    setIsBookmarked(bookmarkedByMe);
+  }, [bookmarkedByMe]);
+
+  const handleBookmark = useCallback(() => {
+    if (!isPending && madingId) {
       toggleBookmark({ madingId });
     }
-  };
+  }, [isPending, madingId, toggleBookmark]);
+
   return (
     <button onClick={handleBookmark} className="grid">
       <MaterialSymbol
