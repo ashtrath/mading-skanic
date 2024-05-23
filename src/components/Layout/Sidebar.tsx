@@ -13,11 +13,14 @@ export type SidebarItem = Omit<NavLinkProps, "children"> & {
 export type SidebarProps = {
   currentUser: CurrentUser;
   items: SidebarItem[];
+  className?: string;
 };
 
-const Sidebar = ({ currentUser, items }: SidebarProps) => {
+const Sidebar = ({ currentUser, items, className }: SidebarProps) => {
   return (
-    <aside className="flex h-fit w-64 flex-col gap-4 self-start border border-mono-black bg-mono-white px-8 py-4">
+    <aside
+      className={`flex h-fit w-64 shrink-0 flex-col gap-4 self-start border border-mono-black bg-mono-white px-8 py-4 ${className}`}
+    >
       {items
         .filter((item) => (item.condition ? item.condition(currentUser) : true))
         .map((item) => (
