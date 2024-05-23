@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { format, formatDistanceToNowStrict, isToday } from "date-fns";
 import { useEffect, useRef } from "react";
 import slugify from "slugify";
@@ -12,7 +13,10 @@ export const formatTimeAgo = (date: Date, options?: Options) => {
   const dateToFormat = new Date(date);
 
   if (options?.smart === true)
-    return format(dateToFormat, isToday(dateToFormat) ? "HH:mm" : "dd MMMM yyyy, HH:mm");
+    return format(
+      dateToFormat,
+      isToday(dateToFormat) ? "HH:mm" : "dd MMMM yyyy, HH:mm",
+    );
 
   return formatDistanceToNowStrict(dateToFormat, {
     addSuffix: true,
@@ -119,4 +123,12 @@ export const getFilterByInput = (filter?: string) => {
   if (typeof filter === "string") {
     return filters[filter];
   }
+};
+
+export const handleDatabaseError = (error: any) => {
+  console.error("Database Error:", error);
+  throw new TRPCError({
+    code: "INTERNAL_SERVER_ERROR",
+    message: "An unexpected error occured",
+  });
 };
