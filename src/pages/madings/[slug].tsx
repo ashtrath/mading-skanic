@@ -16,6 +16,7 @@ import Footer from "~/components/Layout/Footer";
 import NavBar from "~/components/Layout/NavBar";
 import BookmarkButton from "~/components/ListMading/BookmarkButton";
 import CommentButton from "~/components/ListMading/CommentButton";
+import MetaTags from "~/components/Meta/MetaTags";
 import Button from "~/components/ui/Button";
 import ProfileImage from "~/components/ui/ProfileImage";
 
@@ -26,7 +27,7 @@ const ArticlePage: NextPage<
   const router = useRouter();
   const { slug } = props;
 
-  const { data: mading, refetch } = api.mading.getMadingBySlug.useQuery(
+  const { data: mading } = api.mading.getMadingBySlug.useQuery(
     { slug },
     {
       refetchOnWindowFocus: false,
@@ -35,6 +36,7 @@ const ArticlePage: NextPage<
 
   return (
     <>
+      <MetaTags title={mading?.title} description={mading?.description} />
       <NavBar />
       <main className="mx-20 my-8 min-h-screen">
         <div className="flex items-center justify-between">

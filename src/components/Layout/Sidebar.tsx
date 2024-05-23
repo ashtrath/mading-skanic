@@ -17,7 +17,7 @@ export type SidebarProps = {
 
 const Sidebar = ({ currentUser, items }: SidebarProps) => {
   return (
-    <aside className="flex h-full w-64 flex-col gap-4 self-start border border-mono-black bg-mono-white px-8 py-4">
+    <aside className="flex h-fit w-64 flex-col gap-4 self-start border border-mono-black bg-mono-white px-8 py-4">
       {items
         .filter((item) => (item.condition ? item.condition(currentUser) : true))
         .map((item) => (
