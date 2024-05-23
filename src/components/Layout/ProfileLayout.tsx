@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 import { type SymbolCodepoints } from "react-material-symbols";
 
-import { type User } from "next-auth";
+import { type $Enums } from "@prisma/client";
 import MetaTags from "../Meta/MetaTags";
 import NavBar from "./NavBar";
 import Sidebar, { type SidebarItem, type SidebarProps } from "./Sidebar";
@@ -9,8 +9,10 @@ import Sidebar, { type SidebarItem, type SidebarProps } from "./Sidebar";
 type LayoutProps = Omit<SidebarProps, "items"> & {
   children: ReactNode;
   user?: {
+    id: string;
     username: string;
     namaSiswa: string;
+    role: $Enums.Roles;
   };
 };
 
@@ -25,22 +27,26 @@ const ProfileLayout = ({ children, currentUser, user }: LayoutProps) => {
       label: "Madings",
       href: `/u/${user?.username}/madings`,
       icon: "article" as SymbolCodepoints,
-      condition: (user: User) => user.role === "Penulis",
+      condition: () => user?.role === "Penulis",
     },
     {
       label: "Settings",
       href: `/u/${user?.username}/settings`,
       icon: "settings" as SymbolCodepoints,
-      condition: (user: User) => currentUser.id === user.id,
+      condition: () => currentUser.id === user?.id,
     },
   ];
 
   return (
     <>
       <MetaTags title={`${user?.namaSiswa} (@${user?.username})`} />
-      <NavBar />
-      <main className="my-16 flex min-h-screen gap-8 px-20">
-        <Sidebar currentUser={currentUser} items={sidebarItems} />
+      <NavBar isLandingPage={true} />
+      <main className="flex min-h-screen gap-8 px-20 pt-36">
+        <Sidebar
+          currentUser={currentUser}
+          items={sidebarItems}
+          className="sticky left-0 top-36"
+        />
         {children}
       </main>
     </>
