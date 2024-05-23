@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { type ReactNode } from "react";
 import { MaterialSymbol, type SymbolCodepoints } from "react-material-symbols";
 
-type NavLinkProps = {
+export type NavLinkProps = {
   icon: SymbolCodepoints;
   href: string;
   children: ReactNode;

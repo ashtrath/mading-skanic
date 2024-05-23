@@ -1,5 +1,5 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { type Roles } from "@prisma/client";
+import { type $Enums } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { type GetServerSidePropsContext } from "next";
 import {
@@ -25,18 +25,18 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
       id: string;
-      role: Roles;
+      role: $Enums.Roles;
     };
   }
 
   interface User extends DefaultUser {
-    role: Roles;
+    role: $Enums.Roles;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
-    role: Roles;
+    role: $Enums.Roles;
   }
 }
 
